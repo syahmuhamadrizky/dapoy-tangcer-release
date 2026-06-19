@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pengaturan - Bantuan Siswa Tangerang</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Duplicate Dashboard styles to maintain consistent layout -->
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #1E3A5F;
+            --primary-light: #2D4A6F;
+            --secondary: #3B82F6;
+            --accent: #06B6D4;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --bg-light: #F0F9FF;
+            --bg-card: #FFFFFF;
+            --text-primary: #1E293B;
+            --text-secondary: #64748B;
+            --border: #E2E8F0;
+            --sidebar-width: 260px;
+        }
+        body { font-family: 'Inter', sans-serif; background: var(--bg-light); min-height: 100vh; }
+        
+        .sidebar { position: fixed; top: 0; left: 0; width: var(--sidebar-width); height: 100vh; background: linear-gradient(180deg, var(--primary) 0%, var(--primary-light) 100%); color: white; z-index: 1000; transition: transform 0.3s ease; }
+        .sidebar-header { padding: 1.5rem; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+        .sidebar-logo { display: flex; align-items: center; gap: 0.75rem; }
+        .logo-icon { width: 45px; height: 45px; background: rgba(255, 255, 255, 0.15); border-radius: 12px; display: flex; align-items: center; justify-content: center; }
+        .logo-icon svg { width: 25px; height: 25px; fill: white; }
+        .logo-text h2 { font-family: 'Poppins', sans-serif; font-size: 1rem; font-weight: 700; line-height: 1.2; }
+        .logo-text p { font-size: 0.7rem; opacity: 0.7; }
+        .sidebar-nav { padding: 1rem 0; }
+        .nav-item { display: flex; align-items: center; padding: 0.875rem 1.5rem; color: rgba(255, 255, 255, 0.8); text-decoration: none; transition: all 0.3s ease; gap: 1rem; }
+        .nav-item:hover, .nav-item.active { background: rgba(255, 255, 255, 0.1); color: white; border-left: 4px solid var(--accent); }
+        .nav-item svg { width: 20px; height: 20px; }
+        .sidebar-footer { position: absolute; bottom: 0; width: 100%; padding: 1.5rem; border-top: 1px solid rgba(255, 255, 255, 0.1); background: rgba(0, 0, 0, 0.1); }
+        .user-info { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+        .user-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; }
+        .user-details h4 { font-size: 0.9rem; font-weight: 600; }
+        .user-details p { font-size: 0.75rem; opacity: 0.8; }
+        .btn-logout { display: flex; align-items: center; justify-content: center; gap: 0.5rem; width: 100%; padding: 0.75rem; background: rgba(239, 68, 68, 0.1); color: #FCA5A5; border: 1px solid rgba(239, 68, 68, 0.2); border-radius: 8px; text-decoration: none; font-weight: 500; transition: all 0.3s ease; }
+        .btn-logout:hover { background: var(--danger); color: white; }
+        .btn-logout svg { width: 18px; height: 18px; }
+
+        .main-content { margin-left: var(--sidebar-width); transition: margin-left 0.3s ease; }
+        .top-header { display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 2rem; background: var(--bg-light); position: sticky; top: 0; z-index: 99; }
+        .header-title h1 { font-family: 'Poppins', sans-serif; font-size: 1.5rem; color: var(--primary); margin-bottom: 0.25rem; }
+        .header-title p { color: var(--text-secondary); font-size: 0.875rem; }
+        
+        .page-content { padding: 0 2rem 2rem; }
+        
+        .card { background: var(--bg-card); border-radius: 16px; padding: 2rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); margin-bottom: 1.5rem; max-width: 600px; }
+        .card-header { margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
+        .card-header h2 { font-family: 'Poppins', sans-serif; font-size: 1.25rem; color: var(--primary); }
+        
+        .form-group { margin-bottom: 1.5rem; }
+        .form-label { display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--text-primary); font-size: 0.9rem; }
+        .form-control { width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 8px; font-family: 'Inter', sans-serif; font-size: 0.95rem; transition: all 0.3s ease; }
+        .form-control:focus { outline: none; border-color: var(--secondary); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); }
+        
+        .btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 500; font-family: 'Inter', sans-serif; cursor: pointer; transition: all 0.3s ease; border: none; font-size: 0.95rem; }
+        .btn-primary { background: var(--secondary); color: white; }
+        .btn-primary:hover { background: #2563EB; }
+        
+        .alert { padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; font-size: 0.9rem; display: none; }
+        .alert-success { background: #D1FAE5; color: #065F46; border: 1px solid #A7F3D0; }
+        .alert-error { background: #FEE2E2; color: #991B1B; border: 1px solid #FECACA; }
+
+        .menu-toggle { display: none; background: none; border: none; cursor: pointer; padding: 0.5rem; border-radius: 8px; }
+        .menu-toggle svg { width: 24px; height: 24px; fill: var(--primary); }
+        .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 999; }
+
+        @media (max-width: 768px) {
+            :root { --sidebar-width: 0px; }
+            .sidebar { transform: translateX(-100%); width: 280px; }
+            .sidebar.active { transform: translateX(0); }
+            .sidebar-overlay.active { display: block; }
+            .main-content { margin-left: 0; }
+            .menu-toggle { display: block; }
+            .header-title h1 { font-size: 1.25rem; }
+            .page-content { padding: 0 1rem 1rem; }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+    <!-- Sidebar Include (Copied from dashboard.ejs) -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z" />
+                    </svg>
+                </div>
+                <div class="logo-text">
+                    <h2>Bantuan Siswa</h2>
+                    <p>Tangerang</p>
+                </div>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="/admin/dashboard" class="nav-item <%= page === 'dashboard' ? 'active' : '' %>">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z" />
+                </svg>
+                <span>Dashboard</span>
+            </a>
+            <a href="/admin/siswa" class="nav-item <%= page === 'siswa' ? 'active' : '' %>">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z" />
+                </svg>
+                <span>Data Siswa</span>
+            </a>
+            <a href="/admin/bantuan" class="nav-item <%= page === 'bantuan' ? 'active' : '' %>">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z" />
+                </svg>
+                <span>Data Bantuan</span>
+            </a>
+            <a href="/admin/pengajuan-rekening" class="nav-item <%= page === 'pengajuan-rekening' ? 'active' : '' %>">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9H9V9h10v2zm-4 4H9v-2h6v2zm4-8H9V5h10v2z" />
+                </svg>
+                <span>Pengajuan Rekening</span>
+            </a>
+            <a href="/admin/laporan-bantuan" class="nav-item <%= page === 'laporan-bantuan' ? 'active' : '' %>">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z" />
+                </svg>
+                <span>Laporan Bantuan</span>
+            </a>
+            <a href="/admin/pengaturan" class="nav-item <%= page === 'pengaturan' ? 'active' : '' %>">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.06-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.73,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.06,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.43-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.49-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z" />
+                </svg>
+                <span>Pengaturan</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-info">
+                <div class="user-avatar">
+                    <%= user.nama.charAt(0).toUpperCase() %>
+                </div>
+                <div class="user-details">
+                    <h4>
+                        <%= user.nama %>
+                    </h4>
+                    <p>Administrator</p>
+                </div>
+            </div>
+            <a href="/logout" class="btn-logout">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z" />
+                </svg>
+                Logout
+            </a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="top-header">
+            <div class="header-left">
+                <button class="menu-toggle" onclick="toggleSidebar()">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
+                    </svg>
+                </button>
+                <div class="header-title">
+                    <h1>Pengaturan</h1>
+                    <p>Ubah password dan kelola preferensi akun Anda</p>
+                </div>
+            </div>
+        </header>
+
+        <div class="page-content">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Ganti Password</h2>
+                </div>
+                
+                <div class="alert alert-success" id="alertSuccess">Password berhasil diubah.</div>
+                <div class="alert alert-error" id="alertError">Gagal mengubah password.</div>
+
+                <form id="formGantiPassword" onsubmit="gantiPassword(event)">
+                    <div class="form-group">
+                        <label class="form-label">Password Lama</label>
+                        <input type="password" id="oldPassword" class="form-control" required placeholder="Masukkan password lama">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Password Baru</label>
+                        <input type="password" id="newPassword" class="form-control" required placeholder="Masukkan password baru">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Konfirmasi Password Baru</label>
+                        <input type="password" id="confirmPassword" class="form-control" required placeholder="Ulangi password baru">
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" id="btnSubmit">
+                        <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
+                            <path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/>
+                        </svg>
+                        Simpan Perubahan
+                    </button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('active');
+            document.getElementById('sidebarOverlay').classList.toggle('active');
+        }
+
+        async function gantiPassword(e) {
+            e.preventDefault();
+            
+            const oldPassword = document.getElementById('oldPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const btnSubmit = document.getElementById('btnSubmit');
+            const alertSuccess = document.getElementById('alertSuccess');
+            const alertError = document.getElementById('alertError');
+            
+            if (newPassword !== confirmPassword) {
+                alertError.textContent = 'Password baru dan konfirmasi tidak cocok!';
+                alertError.style.display = 'block';
+                alertSuccess.style.display = 'none';
+                return;
+            }
+
+            if (newPassword.length < 6) {
+                alertError.textContent = 'Password baru minimal 6 karakter.';
+                alertError.style.display = 'block';
+                alertSuccess.style.display = 'none';
+                return;
+            }
+
+            btnSubmit.disabled = true;
+            btnSubmit.innerHTML = 'Menyimpan...';
+            
+            try {
+                const res = await fetch('/api/admin/change-password', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ oldPassword, newPassword })
+                });
+                
+                const data = await res.json();
+                
+                if (data.success) {
+                    alertSuccess.textContent = data.message;
+                    alertSuccess.style.display = 'block';
+                    alertError.style.display = 'none';
+                    document.getElementById('formGantiPassword').reset();
+                } else {
+                    alertError.textContent = data.message;
+                    alertError.style.display = 'block';
+                    alertSuccess.style.display = 'none';
+                }
+            } catch (err) {
+                alertError.textContent = 'Terjadi kesalahan saat menghubungi server.';
+                alertError.style.display = 'block';
+                alertSuccess.style.display = 'none';
+            } finally {
+                btnSubmit.disabled = false;
+                btnSubmit.innerHTML = `
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
+                        <path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/>
+                    </svg>
+                    Simpan Perubahan
+                `;
+            }
+        }
+    </script>
+</body>
+</html>
