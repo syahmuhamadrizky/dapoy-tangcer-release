@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Admin - Bantuan Siswa Tangerang</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #1E3A5F;
+            --primary-light: #2D4A6F;
+            --secondary: #3B82F6;
+            --accent: #06B6D4;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --bg-light: #F0F9FF;
+            --bg-card: #FFFFFF;
+            --text-primary: #1E293B;
+            --text-secondary: #64748B;
+            --border: #E2E8F0;
+            --sidebar-width: 260px;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-light);
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: linear-gradient(180deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            z-index: 1000;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-icon svg {
+            width: 25px;
+            height: 25px;
+            fill: white;
+        }
+
+        .logo-text h2 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .logo-text p {
+            font-size: 0.7rem;
+            opacity: 0.7;
+        }
+
+        .sidebar-nav {
+            padding: 1rem 0;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 0.875rem 1.5rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+            gap: 0.75rem;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .nav-item.active {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            border-left-color: var(--accent);
+        }
+
+        .nav-item svg {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+        }
+
+        .nav-item span {
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .sidebar-footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 1rem 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: var(--accent);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+
+        .user-details h4 {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .user-details p {
+            font-size: 0.75rem;
+            opacity: 0.7;
+        }
+
+        .btn-logout {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            width: 100%;
+            margin-top: 1rem;
+            padding: 0.75rem;
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 10px;
+            color: #FCA5A5;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            justify-content: center;
+        }
+
+        .btn-logout:hover {
+            background: rgba(239, 68, 68, 0.3);
+            color: white;
+        }
+
+        .btn-logout svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            min-height: 100vh;
+        }
+
+        /* Top Header */
+        .top-header {
+            background: var(--bg-card);
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .menu-toggle {
+            display: none;
+            background: var(--bg-light);
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 10px;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .menu-toggle svg {
+            width: 24px;
+            height: 24px;
+            fill: var(--text-primary);
+        }
+
+        .header-title h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .header-title p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .header-date {
+            background: var(--bg-light);
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* Page Content */
+        .page-content {
+            padding: 2rem;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            border: 1px solid var(--border);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .stat-icon.blue {
+            background: linear-gradient(135deg, #3B82F6 0%, #60A5FA 100%);
+        }
+
+        .stat-icon.cyan {
+            background: linear-gradient(135deg, #06B6D4 0%, #22D3EE 100%);
+        }
+
+        .stat-icon.green {
+            background: linear-gradient(135deg, #10B981 0%, #34D399 100%);
+        }
+
+        .stat-icon.orange {
+            background: linear-gradient(135deg, #F59E0B 0%, #FBBF24 100%);
+        }
+
+        .stat-icon svg {
+            width: 28px;
+            height: 28px;
+            fill: white;
+        }
+
+        .stat-info h3 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1;
+        }
+
+        .stat-info p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+
+        /* Content Card */
+        .content-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .card-header h3 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card-header h3 svg {
+            width: 22px;
+            height: 22px;
+            fill: var(--secondary);
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.625rem 1rem;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            border: none;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--accent) 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--success) 0%, #34D399 100%);
+            color: white;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--border);
+            color: var(--text-secondary);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--secondary);
+            color: var(--secondary);
+            background: rgba(59, 130, 246, 0.05);
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .action-card {
+            background: linear-gradient(135deg, var(--bg-light) 0%, white 100%);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .action-card:hover {
+            border-color: var(--secondary);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .action-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--secondary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .action-icon svg {
+            width: 24px;
+            height: 24px;
+            fill: white;
+        }
+
+        .action-info h4 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .action-info p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* Welcome Banner */
+        .welcome-banner {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 16px;
+            padding: 2rem;
+            color: white;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .welcome-banner::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+        }
+
+        .welcome-banner::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            right: 10%;
+            width: 150px;
+            height: 150px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+        }
+
+        .welcome-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .welcome-banner h2 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .welcome-banner p {
+            font-size: 1rem;
+            opacity: 0.9;
+            max-width: 500px;
+        }
+
+        .welcome-stats {
+            display: flex;
+            gap: 2rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .welcome-stat {
+            text-align: center;
+        }
+
+        .welcome-stat h4 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .welcome-stat p {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        /* Overlay for mobile */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            :root {
+                --sidebar-width: 220px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            :root {
+                --sidebar-width: 0px;
+            }
+
+            .sidebar {
+                transform: translateX(-100%);
+                width: 280px;
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .sidebar-overlay.active {
+                display: block;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            .top-header {
+                padding: 1rem;
+            }
+
+            .header-title h1 {
+                font-size: 1.2rem;
+            }
+
+            .header-date {
+                display: none;
+            }
+
+            .page-content {
+                padding: 1rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+
+            .stat-card {
+                padding: 1rem;
+            }
+
+            .stat-icon {
+                width: 45px;
+                height: 45px;
+                border-radius: 12px;
+            }
+
+            .stat-icon svg {
+                width: 22px;
+                height: 22px;
+            }
+
+            .stat-info h3 {
+                font-size: 1.5rem;
+            }
+
+            .card-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .card-actions {
+                width: 100%;
+            }
+
+            .card-actions .btn {
+                flex: 1;
+                justify-content: center;
+            }
+
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+
+            .welcome-banner {
+                padding: 1.5rem;
+            }
+
+            .welcome-banner h2 {
+                font-size: 1.25rem;
+            }
+
+            .welcome-stats {
+                gap: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path
+                            d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z" />
+                    </svg>
+                </div>
+                <div class="logo-text">
+                    <h2>Bantuan Siswa</h2>
+                    <p>Tangerang</p>
+                </div>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="/admin/dashboard" class="nav-item <%= page === 'dashboard' ? 'active' : '' %>">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z" />
+                </svg>
+                <span>Dashboard</span>
+            </a>
+            <a href="/admin/siswa" class="nav-item <%= page === 'siswa' ? 'active' : '' %>">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z" />
+                </svg>
+                <span>Data Siswa</span>
+            </a>
+            <a href="/admin/bantuan" class="nav-item <%= page === 'bantuan' ? 'active' : '' %>">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z" />
+                </svg>
+                <span>Data Bantuan</span>
+            </a>
+            <a href="/admin/pengajuan-rekening" class="nav-item <%= page === 'pengajuan-rekening' ? 'active' : '' %>">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9H9V9h10v2zm-4 4H9v-2h6v2zm4-8H9V5h10v2z" />
+                </svg>
+                <span>Pengajuan Rekening</span>
+            </a>
+            <a href="/admin/laporan-bantuan" class="nav-item <%= page === 'laporan-bantuan' ? 'active' : '' %>">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z" />
+                </svg>
+                <span>Laporan Bantuan</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-info">
+                <div class="user-avatar">
+                    <%= user.nama.charAt(0).toUpperCase() %>
+                </div>
+                <div class="user-details">
+                    <h4>
+                        <%= user.nama %>
+                    </h4>
+                    <p>Administrator</p>
+                </div>
+            </div>
+            <a href="/logout" class="btn-logout">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z" />
+                </svg>
+                Logout
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Top Header -->
+        <header class="top-header">
+            <div class="header-left">
+                <button class="menu-toggle" onclick="toggleSidebar()">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
+                    </svg>
+                </button>
+                <div class="header-title">
+                    <h1>Dashboard</h1>
+                    <p>Selamat datang di Sistem Pendataan Bantuan Siswa</p>
+                </div>
+            </div>
+            <div class="header-right">
+                <button class="btn btn-outline" id="btnCekUpdate" onclick="cekUpdate()"
+                    style="border-color: var(--secondary); color: var(--secondary);">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z" />
+                    </svg>
+                    Cek Update
+                </button>
+                <div class="header-date" id="currentDate"></div>
+            </div>
+        </header>
+
+        <!-- Page Content -->
+        <div class="page-content">
+            <!-- License Status Banner -->
+            <div class="license-banner" id="licenseBanner"
+                style="display: none; background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%); border-radius: 16px; padding: 1.5rem 2rem; margin-bottom: 1.5rem; color: white;">
+                <div
+                    style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <svg viewBox="0 0 24 24" width="32" height="32" fill="currentColor">
+                            <path
+                                d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z" />
+                        </svg>
+                        <div>
+                            <h3 style="font-size: 1.1rem; margin-bottom: 0.25rem;">⚠️ Lisensi Belum Aktif</h3>
+                            <p style="font-size: 0.85rem; opacity: 0.9;" id="licenseMessage">Silakan aktivasi lisensi
+                                untuk menggunakan aplikasi tanpa batasan waktu.</p>
+                        </div>
+                    </div>
+                    <button onclick="showActivationModal()"
+                        style="background: white; color: #EF4444; border: none; padding: 0.75rem 1.5rem; border-radius: 10px; font-weight: 600; cursor: pointer;">
+                        Aktivasi Lisensi
+                    </button>
+                </div>
+            </div>
+
+            <!-- Welcome Banner -->
+            <div class="welcome-banner">
+                <div class="welcome-content">
+                    <h2>Selamat Datang, <%= user.nama %>! 👋</h2>
+                    <p>Kelola data siswa penerima bantuan Tangerang Cerdas dan Program Indonesia Pintar dengan mudah.
+                    </p>
+                    <div class="welcome-stats">
+                        <div class="welcome-stat">
+                            <h4>
+                                <%= stats.totalSiswa %>
+                            </h4>
+                            <p>Total Siswa</p>
+                        </div>
+                        <div class="welcome-stat">
+                            <h4>
+                                <%= stats.tangerangCerdas + stats.pip %>
+                            </h4>
+                            <p>Penerima Bantuan</p>
+                        </div>
+                        <div class="welcome-stat">
+                            <h4>
+                                <%= stats.sudahCair %>
+                            </h4>
+                            <p>Sudah Cair</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon blue">
+                        <svg viewBox="0 0 24 24">
+                            <path
+                                d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z" />
+                        </svg>
+                    </div>
+                    <div class="stat-info">
+                        <h3>
+                            <%= stats.totalSiswa %>
+                        </h3>
+                        <p>Total Siswa</p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon cyan">
+                        <svg viewBox="0 0 24 24">
+                            <path
+                                d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9z" />
+                        </svg>
+                    </div>
+                    <div class="stat-info">
+                        <h3>
+                            <%= stats.tangerangCerdas %>
+                        </h3>
+                        <p>Tangerang Cerdas</p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon orange">
+                        <svg viewBox="0 0 24 24">
+                            <path
+                                d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z" />
+                        </svg>
+                    </div>
+                    <div class="stat-info">
+                        <h3>
+                            <%= stats.pip %>
+                        </h3>
+                        <p>Program Indonesia Pintar</p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon green">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                        </svg>
+                    </div>
+                    <div class="stat-info">
+                        <h3>
+                            <%= stats.sudahCair %>
+                        </h3>
+                        <p>Status Cair</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="content-card">
+                <div class="card-header">
+                    <h3>
+                        <svg viewBox="0 0 24 24">
+                            <path
+                                d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z" />
+                        </svg>
+                        Aksi Cepat
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="quick-actions">
+                        <a href="/admin/siswa/add" class="action-card">
+                            <div class="action-icon"
+                                style="background: linear-gradient(135deg, var(--secondary) 0%, var(--accent) 100%);">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+                                </svg>
+                            </div>
+                            <div class="action-info">
+                                <h4>Tambah Siswa Baru</h4>
+                                <p>Tambahkan data siswa baru penerima bantuan</p>
+                            </div>
+                        </a>
+
+                        <a href="/admin/siswa" class="action-card">
+                            <div class="action-icon"
+                                style="background: linear-gradient(135deg, var(--success) 0%, #34D399 100%);">
+                                <svg viewBox="0 0 24 24">
+                                    <path
+                                        d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
+                                </svg>
+                            </div>
+                            <div class="action-info">
+                                <h4>Lihat Data Siswa</h4>
+                                <p>Kelola dan lihat seluruh data siswa</p>
+                            </div>
+                        </a>
+
+                        <a href="/admin/export" class="action-card">
+                            <div class="action-icon"
+                                style="background: linear-gradient(135deg, var(--warning) 0%, #FBBF24 100%);">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
+                                </svg>
+                            </div>
+                            <div class="action-info">
+                                <h4>Export Data</h4>
+                                <p>Unduh data siswa dalam format Excel</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pengaturan -->
+            <div class="content-card" style="margin-top: 1.5rem;">
+                <div class="card-header">
+                    <h3>
+                        <svg viewBox="0 0 24 24">
+                            <path
+                                d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.06-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.73,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.06,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.49-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z" />
+                        </svg>
+                        Pengaturan Sistem
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <form action="/admin/settings/captcha" method="POST"
+                        style="display: flex; align-items: center; justify-content: space-between; padding: 1.5rem; background: var(--bg-light); border-radius: 12px; flex-wrap: wrap; gap: 1rem;">
+                        <div>
+                            <h4 style="margin-bottom: 0.25rem;">Captcha Login</h4>
+                            <p style="font-size: 0.875rem; color: var(--text-secondary);">Aktifkan atau nonaktifkan
+                                keamanan Captcha pada halaman login admin dan siswa.</p>
+                            <div style="margin-top: 0.5rem;">
+                                <span
+                                    style="display: inline-block; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; background-color: <%= settings.enableCaptcha ? '#D1FAE5' : '#FEE2E2' %>; color: <%= settings.enableCaptcha ? '#065F46' : '#991B1B' %>;">
+                                    Status saat ini: <%= settings.enableCaptcha ? 'AKTIF' : 'TIDAK AKTIF' %>
+                                </span>
+                            </div>
+                        </div>
+                        <button type="submit"
+                            style="cursor: pointer; padding: 0.6rem 1.2rem; border-radius: 8px; border: none; font-weight: 600; font-family: 'Inter', sans-serif; background: <%= settings.enableCaptcha ? 'var(--danger)' : 'var(--success)' %>; color: white;">
+                            <%= settings.enableCaptcha ? 'Nonaktifkan Captcha' : 'Aktifkan Captcha' %>
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        // Toggle Sidebar
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+
+        // Display current date
+        function displayDate() {
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('currentDate').textContent = new Date().toLocaleDateString('id-ID', options);
+
+            async function cekUpdate() {
+                const btn = document.getElementById('btnCekUpdate');
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor" class="spin" width="16" height="16"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/></svg> Mengecek...';
+                btn.disabled = true;
+
+                try {
+                    const res = await fetch('/api/admin/check-update', { method: 'POST' });
+                    const result = await res.json();
+                    if (result.success) {
+                        alert('Update berhasil ditarik!\n\nOutput: ' + result.output);
+                    } else {
+                        alert('Gagal: ' + result.message);
+                    }
+                } catch (error) {
+                    alert('Terjadi kesalahan jaringan.');
+                } finally {
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                }
+            }
+
+            // License Functions
+            async function checkLicenseStatus() {
+                try {
+                    const res = await fetch('/api/license-status');
+                    const data = await res.json();
+
+                    const banner = document.getElementById('licenseBanner');
+                    const message = document.getElementById('licenseMessage');
+
+                    if (data.status === 'registered' && data.isLicenseValid) {
+                        banner.style.display = 'none';
+                    } else if (data.status === 'expired') {
+                        banner.style.display = 'block';
+                        banner.style.background = 'linear-gradient(135deg, #EF4444 0%, #DC2626 100%)';
+                        message.textContent = 'Masa trial telah habis. Silakan aktivasi lisensi untuk继续 menggunakan aplikasi.';
+                    } else if (data.status === 'trial') {
+                        banner.style.display = 'block';
+                        banner.style.background = 'linear-gradient(135deg, #F59E0B 0%, #D97706 100%)';
+                        if (data.trialEndsAt) {
+                            const remaining = Math.round((data.trialEndsAt - Date.now()) / 60000);
+                            message.textContent = `Versi Trial - Sisa waktu: ${remaining} menit. Silakan aktivasi lisensi untuk penggunaan tanpa batasan.`;
+                        }
+                    }
+                } catch (error) {
+                    console.error('Failed to check license status:', error);
+                }
+            }
+
+            function showActivationModal() {
+                document.getElementById('activationModal').style.display = 'flex';
+            }
+
+            function hideActivationModal() {
+                document.getElementById('activationModal').style.display = 'none';
+            }
+
+            async function activateLicense() {
+                const licenseKey = document.getElementById('licenseKeyInput').value.trim();
+                const hwidDisplay = document.getElementById('hwidDisplay');
+                const btn = document.getElementById('btnActivate');
+                const resultMsg = document.getElementById('activationResult');
+
+                if (!licenseKey) {
+                    resultMsg.textContent = 'License Key wajib diisi!';
+                    resultMsg.style.color = '#EF4444';
+                    return;
+                }
+
+                btn.innerHTML = 'Mengaktivasi...';
+                btn.disabled = true;
+
+                try {
+                    const res = await fetch('/api/activate', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ license_key: licenseKey })
+                    });
+
+                    const data = await res.json();
+
+                    if (data.success) {
+                        resultMsg.textContent = '✅ Aktivasi berhasil!';
+                        resultMsg.style.color = '#10B981';
+                        setTimeout(() => {
+                            hideActivationModal();
+                            location.reload();
+                        }, 1500);
+                    } else {
+                        resultMsg.textContent = '❌ ' + data.message;
+                        resultMsg.style.color = '#EF4444';
+                    }
+                } catch (error) {
+                    resultMsg.textContent = '❌ Gagal terhubung ke server.';
+                    resultMsg.style.color = '#EF4444';
+                } finally {
+                    btn.innerHTML = 'Aktivasi Sekarang';
+                    btn.disabled = false;
+                }
+            }
+
+            async function showHWID() {
+                try {
+                    const res = await fetch('/api/hwid');
+                    const data = await res.json();
+                    document.getElementById('hwidDisplay').textContent = 'HWID: ' + data.hwid;
+                } catch (error) {
+                    document.getElementById('hwidDisplay').textContent = 'Gagal mengambil HWID';
+                }
+            }
+
+            // Initialize on page load
+            document.addEventListener('DOMContentLoaded', function () {
+                checkLicenseStatus();
+                showHWID();
+            });
+    </script>
+    <style>
+        @keyframes spin {
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .spin {
+            animation: spin 1s linear infinite;
+        }
+    </style>
+
+    <!-- Activation Modal -->
+    <div id="activationModal"
+        style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9999; justify-content: center; align-items: center;">
+        <div
+            style="background: white; border-radius: 16px; padding: 2rem; max-width: 450px; width: 90%; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h2 style="color: var(--primary); font-family: 'Poppins', sans-serif; font-size: 1.25rem;">🔐 Aktivasi
+                    Lisensi</h2>
+                <button onclick="hideActivationModal()"
+                    style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-secondary);">&times;</button>
+            </div>
+
+            <div style="margin-bottom: 1rem;">
+                <label
+                    style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--text-primary);">Hardware
+                    ID (HWID)</label>
+                <div id="hwidDisplay"
+                    style="background: var(--bg-light); padding: 0.75rem; border-radius: 8px; font-family: monospace; font-size: 0.85rem; color: var(--text-secondary);">
+                    Memuat...</div>
+            </div>
+
+            <div style="margin-bottom: 1rem;">
+                <label
+                    style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--text-primary);">License
+                    Key</label>
+                <input type="text" id="licenseKeyInput" placeholder="Masukkan License Key dari Dapoy Hub"
+                    style="width: 100%; padding: 0.75rem; border: 2px solid var(--border); border-radius: 8px; font-size: 0.9rem; outline: none;"
+                    onfocus="this.style.borderColor='var(--secondary)'" onblur="this.style.borderColor='var(--border)'">
+            </div>
+
+            <p id="activationResult" style="margin-bottom: 1rem; font-size: 0.9rem; text-align: center;"></p>
+
+            <div style="display: flex; gap: 0.75rem;">
+                <button onclick="hideActivationModal()"
+                    style="flex: 1; padding: 0.75rem; border: 2px solid var(--border); border-radius: 8px; background: white; color: var(--text-primary); font-weight: 600; cursor: pointer;">
+                    Batal
+                </button>
+                <button id="btnActivate" onclick="activateLicense()"
+                    style="flex: 1; padding: 0.75rem; border: none; border-radius: 8px; background: var(--primary); color: white; font-weight: 600; cursor: pointer;">
+                    Aktivasi Sekarang
+                </button>
+            </div>
+
+            <p style="margin-top: 1rem; font-size: 0.75rem; color: var(--text-secondary); text-align: center;">
+                Dapatkan License Key di <a href="https://hub.dapoy.net" target="_blank"
+                    style="color: var(--secondary);">hub.dapoy.net</a>
+            </p>
+        </div>
+    </div>
+</body>
+
+</html>

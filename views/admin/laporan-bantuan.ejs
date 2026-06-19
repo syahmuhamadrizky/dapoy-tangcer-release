@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Bantuan - Bantuan Siswa Tangerang</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #1E3A5F;
+            --primary-light: #2D4A6F;
+            --secondary: #3B82F6;
+            --accent: #06B6D4;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --bg-light: #F0F9FF;
+            --bg-card: #FFFFFF;
+            --text-primary: #1E293B;
+            --text-secondary: #64748B;
+            --border: #E2E8F0;
+            --sidebar-width: 260px;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-light);
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: linear-gradient(180deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            z-index: 1000;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-icon svg {
+            width: 25px;
+            height: 25px;
+            fill: white;
+        }
+
+        .logo-text h2 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .logo-text p {
+            font-size: 0.7rem;
+            opacity: 0.7;
+        }
+
+        .sidebar-nav {
+            padding: 1rem 0;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 0.875rem 1.5rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+            gap: 0.75rem;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .nav-item.active {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            border-left-color: var(--accent);
+        }
+
+        .nav-item svg {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+        }
+
+        .nav-item span {
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .sidebar-footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 1rem 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: var(--accent);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+
+        .user-details h4 {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .user-details p {
+            font-size: 0.75rem;
+            opacity: 0.7;
+        }
+
+        .btn-logout {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            width: 100%;
+            margin-top: 1rem;
+            padding: 0.75rem;
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 10px;
+            color: #FCA5A5;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            justify-content: center;
+        }
+
+        .btn-logout:hover {
+            background: rgba(239, 68, 68, 0.3);
+            color: white;
+        }
+
+        .btn-logout svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            min-height: 100vh;
+        }
+
+        .top-header {
+            background: var(--bg-card);
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .menu-toggle {
+            display: none;
+            background: var(--bg-light);
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 10px;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .menu-toggle svg {
+            width: 24px;
+            height: 24px;
+            fill: var(--text-primary);
+        }
+
+        .header-title h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .header-title p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .page-content {
+            padding: 2rem;
+        }
+
+        /* Content Card */
+        .content-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .card-header h3 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card-header h3 svg {
+            width: 22px;
+            height: 22px;
+            fill: var(--secondary);
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.625rem 1rem;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            border: none;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--accent) 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--border);
+            color: var(--text-secondary);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--secondary);
+            color: var(--secondary);
+            background: rgba(59, 130, 246, 0.05);
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        /* Search Bar */
+        .search-bar {
+            margin-bottom: 1.5rem;
+        }
+
+        .search-input-wrapper {
+            position: relative;
+            max-width: 400px;
+        }
+
+        .search-input-wrapper svg {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            fill: var(--text-secondary);
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.875rem 1rem 0.875rem 2.75rem;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease;
+            background: var(--bg-light);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--secondary);
+            background: var(--bg-card);
+        }
+
+        /* Table */
+        .table-container {
+            overflow-x: auto;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th {
+            background: var(--bg-light);
+            padding: 1rem;
+            text-align: left;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--text-primary);
+            border-bottom: 2px solid var(--border);
+            white-space: nowrap;
+        }
+
+        .data-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.9rem;
+            color: var(--text-primary);
+        }
+
+        .data-table tbody tr {
+            transition: background 0.2s ease;
+        }
+
+        .data-table tbody tr:hover {
+            background: var(--bg-light);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.35rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .badge-primary {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--secondary);
+        }
+
+        .badge-success {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        .badge-warning {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+        }
+
+        .badge-danger {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+
+        .action-btns {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-icon svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .btn-icon.view {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--secondary);
+        }
+
+        .btn-icon.view:hover {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .btn-icon.edit {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+        }
+
+        .btn-icon.edit:hover {
+            background: var(--warning);
+            color: white;
+        }
+
+        .btn-icon.delete {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+
+        .btn-icon.delete:hover {
+            background: var(--danger);
+            color: white;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-secondary);
+        }
+
+        .empty-state svg {
+            width: 80px;
+            height: 80px;
+            fill: var(--border);
+            margin-bottom: 1rem;
+        }
+
+        .empty-state h4 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--bg-card);
+            border-radius: 16px;
+            width: 90%;
+            max-width: 500px;
+            padding: 2rem;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal h3 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .modal p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .file-upload {
+            border: 2px dashed var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 1rem;
+        }
+
+        .file-upload:hover {
+            border-color: var(--secondary);
+            background: var(--bg-light);
+        }
+
+        .file-upload svg {
+            width: 48px;
+            height: 48px;
+            fill: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .file-upload input {
+            display: none;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+
+        .delete-modal .modal {
+            max-width: 400px;
+        }
+
+        .delete-warning {
+            text-align: center;
+        }
+
+        .delete-warning svg {
+            width: 64px;
+            height: 64px;
+            fill: var(--danger);
+            margin-bottom: 1rem;
+        }
+
+        /* Overlay for mobile */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        @media (max-width: 1024px) {
+            :root {
+                --sidebar-width: 220px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            :root {
+                --sidebar-width: 0px;
+            }
+
+            .sidebar {
+                transform: translateX(-100%);
+                width: 280px;
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .sidebar-overlay.active {
+                display: block;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            .top-header {
+                padding: 1rem;
+            }
+
+            .header-title h1 {
+                font-size: 1.2rem;
+            }
+
+            .page-content {
+                padding: 1rem;
+            }
+
+            .card-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .card-actions {
+                width: 100%;
+                flex-wrap: wrap;
+            }
+
+            .card-actions .btn {
+                flex: 1;
+                min-width: 120px;
+                justify-content: center;
+            }
+
+            .search-input-wrapper {
+                max-width: 100%;
+            }
+
+            .data-table {
+                font-size: 0.8rem;
+            }
+
+            .data-table th,
+            .data-table td {
+                padding: 0.75rem 0.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">
+                <div class="logo-icon"><svg viewBox="0 0 24 24">
+                        <path
+                            d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z" />
+                    </svg></div>
+                <div class="logo-text">
+                    <h2>Bantuan Siswa</h2>
+                    <p>Tangerang</p>
+                </div>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="/admin/dashboard" class="nav-item <%= page === 'dashboard' ? 'active' : '' %>">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z" />
+                </svg>
+                <span>Dashboard</span>
+            </a>
+            <a href="/admin/siswa" class="nav-item <%= page === 'siswa' ? 'active' : '' %>">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z" />
+                </svg>
+                <span>Data Siswa</span>
+            </a>
+            <a href="/admin/bantuan" class="nav-item <%= page === 'bantuan' ? 'active' : '' %>">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+                </svg>
+                <span>Data Bantuan</span>
+            </a>
+            <a href="/admin/pengajuan-rekening" class="nav-item <%= page === 'pengajuan-rekening' ? 'active' : '' %>">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9H9V9h10v2zm-4 4H9v-2h6v2zm4-8H9V5h10v2z"/>
+                </svg>
+                <span>Pengajuan Rekening</span>
+            </a>
+            <a href="/admin/laporan-bantuan" class="nav-item <%= page === 'laporan-bantuan' ? 'active' : '' %>">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+                </svg>
+                <span>Laporan Bantuan</span>
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="user-info">
+                <div class="user-avatar">
+                    <%= user.nama.charAt(0).toUpperCase() %>
+                </div>
+                <div class="user-details">
+                    <h4>
+                        <%= user.nama %>
+                    </h4>
+                    <p>Administrator</p>
+                </div>
+            </div>
+            <a href="/logout" class="btn-logout">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z" />
+                </svg>
+                Logout
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="top-header">
+            <div class="header-left">
+                <button class="menu-toggle" onclick="toggleSidebar()">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
+                    </svg>
+                </button>
+                <div class="header-title">
+                    <h1>Laporan Bantuan</h1>
+                    <p>Verifikasi laporan pencairan dari orang tua/siswa</p>
+                </div>
+            </div>
+        </header>
+
+        <div class="page-content">
+            <div class="content-card">
+                <div class="card-header">
+                    <h3>
+                        <svg viewBox="0 0 24 24">
+                            <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+                        </svg>
+                        Daftar Laporan (<%= laporanList.length %> data)
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="search-bar" style="display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem;">
+                        <div class="search-input-wrapper" style="flex: 1; min-width: 200px;">
+                            <svg viewBox="0 0 24 24">
+                                <path
+                                    d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
+                            </svg>
+                            <input type="text" class="search-input" id="searchInput"
+                                placeholder="Cari nama siswa..." onkeyup="filterLaporan()">
+                        </div>
+                        <select id="filterJenis" class="search-input" style="width: auto; padding-left: 1rem;" onchange="filterLaporan()">
+                            <option value="">Semua Jenis Bantuan</option>
+                            <% masterBantuan.forEach(mb => { %>
+                                <option value="<%= mb.id %>"><%= mb.nama %></option>
+                            <% }) %>
+                        </select>
+                        <select id="filterStatus" class="search-input" style="width: auto; padding-left: 1rem;" onchange="filterLaporan()">
+                            <option value="">Semua Status</option>
+                            <option value="Menunggu Verifikasi">Menunggu Verifikasi</option>
+                            <option value="Diterima">Diterima</option>
+                            <option value="Ditolak">Ditolak</option>
+                        </select>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="data-table" id="dataTable">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Nama Siswa</th>
+                                    <th>Kelas</th>
+                                    <th>Bantuan</th>
+                                    <th>Tgl Pencairan</th>
+                                    <th>Tgl Penarikan</th>
+                                    <th>Status</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% if (laporanList.length === 0) { %>
+                                    <tr>
+                                        <td colspan="8">
+                                            <div class="empty-state">
+                                                <svg viewBox="0 0 24 24">
+                                                    <path
+                                                        d="M20 6h-8l-2-2H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 12H4V8h16v10z" />
+                                                </svg>
+                                                <h4>Belum Ada Laporan</h4>
+                                                <p>Tidak ada laporan pencairan yang masuk.</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <% } else { %>
+                                    <% laporanList.forEach((lb, index) => { %>
+                                        <tr data-status="<%= lb.status_laporan %>" data-jenis="<%= lb.bantuan_id %>">
+                                            <td><%= index + 1 %></td>
+                                            <td class="nama-siswa"><strong><%= lb.nama_siswa %></strong></td>
+                                            <td><%= lb.kelas || '-' %></td>
+                                            <td><%= lb.nama_bantuan %> (<%= lb.tahun %> Smt <%= lb.semester %>)</td>
+                                            <td><%= new Date(lb.tanggal_pencairan).toLocaleDateString('id-ID') %></td>
+                                            <td><%= new Date(lb.tanggal_penarikan).toLocaleDateString('id-ID') %></td>
+                                            <td>
+                                                <span class="badge <%= lb.status_laporan === 'Diterima' ? 'badge-success' : (lb.status_laporan === 'Ditolak' ? 'badge-danger' : 'badge-warning') %>">
+                                                    <%= lb.status_laporan %>
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <button class="btn-icon view" title="Verifikasi Laporan" onclick='openVerifikasiModal(<%- JSON.stringify(lb) %>)'>
+                                                    <svg viewBox="0 0 24 24" fill="currentColor">
+                                                        <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" />
+                                                    </svg>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    <% }) %>
+                                <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal Verifikasi -->
+    <div class="modal-overlay" id="verifikasiModal">
+        <div class="modal" style="max-width: 600px; max-height: 90vh; overflow-y: auto;">
+            <h3>Verifikasi Laporan</h3>
+            <p>Periksa data dan dokumen bukti pencairan</p>
+            
+            <div style="background: var(--bg-light); padding: 1rem; border-radius: 8px; margin-bottom: 1rem; font-size: 0.9rem;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 0.5rem;">
+                    <div><strong>Nama Siswa:</strong> <span id="v_nama"></span></div>
+                    <div><strong>Bantuan:</strong> <span id="v_bantuan"></span></div>
+                    <div><strong>Tgl Pencairan:</strong> <span id="v_pencairan"></span></div>
+                    <div><strong>Tgl Penarikan:</strong> <span id="v_penarikan"></span></div>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 1rem;">
+                <strong>Dokumen Bukti:</strong>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 0.5rem;">
+                    <a id="v_buku_baru" target="_blank" style="display: none; padding: 0.5rem; background: var(--bg-light); border: 1px solid var(--border); border-radius: 8px; text-decoration: none; color: var(--primary); text-align: center;">📄 Buku Rek Baru</a>
+                    <a id="v_buku_transaksi" target="_blank" style="display: none; padding: 0.5rem; background: var(--bg-light); border: 1px solid var(--border); border-radius: 8px; text-decoration: none; color: var(--primary); text-align: center;">📄 Buku Rek Transaksi</a>
+                    <a id="v_selfie" target="_blank" style="display: none; padding: 0.5rem; background: var(--bg-light); border: 1px solid var(--border); border-radius: 8px; text-decoration: none; color: var(--primary); text-align: center;">📄 Foto Selfie</a>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 1rem;">
+                <strong>Tanda Tangan Orang Tua:</strong>
+                <div style="border: 1px solid var(--border); border-radius: 8px; padding: 0.5rem; background: white; margin-top: 0.5rem;">
+                    <img id="v_tanda_tangan" src="" style="max-width: 100%; max-height: 150px; display: block; margin: 0 auto;">
+                </div>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid var(--border); margin: 1.5rem 0;">
+
+            <form id="verifikasiForm" method="POST" action="">
+                <div style="margin-bottom: 1rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Status Verifikasi</label>
+                    <select name="status_laporan" id="status_laporan" required style="width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 8px; font-family: inherit;">
+                        <option value="Menunggu Verifikasi">Menunggu Verifikasi</option>
+                        <option value="Diterima">Diterima</option>
+                        <option value="Ditolak">Ditolak</option>
+                    </select>
+                </div>
+                
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Catatan Admin (Opsional)</label>
+                    <textarea name="catatan" id="catatan" rows="3" placeholder="Masukkan alasan penolakan atau catatan lainnya..." style="width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 8px; font-family: inherit; resize: vertical;"></textarea>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-outline" onclick="closeModal('verifikasiModal')">Batal</button>
+                    <button type="submit" class="btn btn-primary">Simpan Verifikasi</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('active');
+            document.getElementById('sidebarOverlay').classList.toggle('active');
+        }
+
+        function filterLaporan() {
+            const searchText = document.getElementById('searchInput').value.toLowerCase();
+            const status = document.getElementById('filterStatus').value;
+            const jenis = document.getElementById('filterJenis').value;
+            
+            const table = document.getElementById('dataTable');
+            const tr = table.getElementsByTagName('tr');
+
+            for (let i = 1; i < tr.length; i++) {
+                const row = tr[i];
+                if(row.querySelector('.empty-state')) continue;
+
+                const namaSiswa = row.querySelector('.nama-siswa') ? row.querySelector('.nama-siswa').textContent.toLowerCase() : '';
+                const rowStatus = row.getAttribute('data-status');
+                const rowJenis = row.getAttribute('data-jenis');
+
+                let match = true;
+
+                if (searchText && !namaSiswa.includes(searchText)) match = false;
+                if (status && rowStatus !== status) match = false;
+                if (jenis && rowJenis !== jenis) match = false;
+
+                row.style.display = match ? '' : 'none';
+            }
+        }
+
+        function openVerifikasiModal(data) {
+            document.getElementById('verifikasiForm').action = '/admin/laporan-bantuan/' + data.id + '/verifikasi';
+            document.getElementById('v_nama').textContent = data.nama_siswa;
+            document.getElementById('v_bantuan').textContent = data.nama_bantuan + ' (' + data.tahun + ' Smt ' + data.semester + ')';
+            document.getElementById('v_pencairan').textContent = new Date(data.tanggal_pencairan).toLocaleDateString('id-ID');
+            document.getElementById('v_penarikan').textContent = new Date(data.tanggal_penarikan).toLocaleDateString('id-ID');
+            
+            // Dokumen Links
+            const lnkBaru = document.getElementById('v_buku_baru');
+            if(data.foto_buku_rekening_baru) {
+                lnkBaru.href = '/uploads/laporan/' + data.foto_buku_rekening_baru;
+                lnkBaru.style.display = 'block';
+            } else {
+                lnkBaru.style.display = 'none';
+            }
+
+            const lnkTrans = document.getElementById('v_buku_transaksi');
+            if(data.foto_buku_rekening_transaksi) {
+                lnkTrans.href = '/uploads/laporan/' + data.foto_buku_rekening_transaksi;
+                lnkTrans.style.display = 'block';
+            } else {
+                lnkTrans.style.display = 'none';
+            }
+
+            const lnkSelfie = document.getElementById('v_selfie');
+            if(data.foto_selfie) {
+                lnkSelfie.href = '/uploads/laporan/' + data.foto_selfie;
+                lnkSelfie.style.display = 'block';
+            } else {
+                lnkSelfie.style.display = 'none';
+            }
+
+            // Tanda Tangan
+            const imgTtd = document.getElementById('v_tanda_tangan');
+            imgTtd.src = data.tanda_tangan || '';
+
+            // Form data
+            document.getElementById('status_laporan').value = data.status_laporan;
+            document.getElementById('catatan').value = data.catatan || '';
+
+            document.getElementById('verifikasiModal').classList.add('active');
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
+        }
+    </script>
+</body>
+
+</html>

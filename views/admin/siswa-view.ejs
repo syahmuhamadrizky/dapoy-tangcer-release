@@ -1,0 +1,1381 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail Siswa - Bantuan Siswa Tangerang</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #1E3A5F;
+            --primary-light: #2D4A6F;
+            --secondary: #3B82F6;
+            --accent: #06B6D4;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --bg-light: #F0F9FF;
+            --bg-card: #FFFFFF;
+            --text-primary: #1E293B;
+            --text-secondary: #64748B;
+            --border: #E2E8F0;
+            --sidebar-width: 260px;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-light);
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: linear-gradient(180deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            z-index: 1000;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-icon svg {
+            width: 25px;
+            height: 25px;
+            fill: white;
+        }
+
+        .logo-text h2 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .logo-text p {
+            font-size: 0.7rem;
+            opacity: 0.7;
+        }
+
+        .sidebar-nav {
+            padding: 1rem 0;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 0.875rem 1.5rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            border-left: 3px solid transparent;
+            gap: 0.75rem;
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+        }
+
+        .nav-item.active {
+            border-left-color: var(--accent);
+        }
+
+        .nav-item svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .nav-item span {
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .sidebar-footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 1rem 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: var(--accent);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+
+        .user-details h4 {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .user-details p {
+            font-size: 0.75rem;
+            opacity: 0.7;
+        }
+
+        .btn-logout {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            width: 100%;
+            margin-top: 1rem;
+            padding: 0.75rem;
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 10px;
+            color: #FCA5A5;
+            font-size: 0.85rem;
+            cursor: pointer;
+            text-decoration: none;
+            justify-content: center;
+        }
+
+        .btn-logout:hover {
+            background: rgba(239, 68, 68, 0.3);
+            color: white;
+        }
+
+        .btn-logout svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .main-content {
+            margin-left: var(--sidebar-width);
+            min-height: 100vh;
+        }
+
+        .top-header {
+            background: var(--bg-card);
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            background: var(--bg-light);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: var(--border);
+        }
+
+        .back-btn svg {
+            width: 24px;
+            height: 24px;
+            fill: var(--text-primary);
+        }
+
+        .header-title h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 0.75rem;
+            margin-left: auto;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.625rem 1rem;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            border: none;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--accent) 100%);
+            color: white;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--border);
+            color: var(--text-secondary);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--secondary);
+            color: var(--secondary);
+        }
+
+        .page-content {
+            padding: 2rem;
+        }
+
+        .profile-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        .profile-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            padding: 2rem;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Poppins', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .profile-info h2 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .profile-info p {
+            opacity: 0.9;
+            font-size: 0.95rem;
+        }
+
+        .profile-badges {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.35rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .badge-primary {
+            background: rgba(59, 130, 246, 0.2);
+            color: #93C5FD;
+        }
+
+        .badge-success {
+            background: rgba(16, 185, 129, 0.2);
+            color: #6EE7B7;
+        }
+
+        .badge-warning {
+            background: rgba(245, 158, 11, 0.2);
+            color: #FCD34D;
+        }
+
+        .profile-body {
+            padding: 1.5rem;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .info-section {}
+
+        .info-section-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .info-section-title svg {
+            width: 20px;
+            height: 20px;
+            fill: var(--secondary);
+        }
+
+        .info-row {
+            display: flex;
+            margin-bottom: 0.75rem;
+        }
+
+        .info-label {
+            width: 140px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .info-value {
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            word-break: break-word;
+        }
+
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        .menu-toggle {
+            display: none;
+            background: var(--bg-light);
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 10px;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .menu-toggle svg {
+            width: 24px;
+            height: 24px;
+            fill: var(--text-primary);
+        }
+
+        .rek-card {
+            background: var(--bg-light);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .rek-info h4 {
+            font-size: 1rem;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .rek-info p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .rek-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .rek-actions .btn {
+            padding: 0.5rem;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--bg-card);
+            border-radius: 16px;
+            width: 90%;
+            max-width: 500px;
+            padding: 2rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-header h3 {
+            font-size: 1.25rem;
+            color: var(--text-primary);
+        }
+
+        .btn-close {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+
+        .btn-close svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--secondary);
+        }
+
+        @media (max-width: 1024px) {
+            :root {
+                --sidebar-width: 220px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            :root {
+                --sidebar-width: 0px;
+            }
+
+            .sidebar {
+                transform: translateX(-100%);
+                width: 280px;
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .sidebar-overlay.active {
+                display: block;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            .top-header {
+                padding: 1rem;
+                flex-wrap: wrap;
+            }
+
+            .header-title h1 {
+                font-size: 1.2rem;
+            }
+
+            .header-actions {
+                width: 100%;
+                margin-left: 0;
+                margin-top: 1rem;
+            }
+
+            .header-actions .btn {
+                flex: 1;
+                justify-content: center;
+            }
+
+            .page-content {
+                padding: 1rem;
+            }
+
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">
+                <div class="logo-icon"><svg viewBox="0 0 24 24">
+                        <path
+                            d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z" />
+                    </svg></div>
+                <div class="logo-text">
+                    <h2>Bantuan Siswa</h2>
+                    <p>Tangerang</p>
+                </div>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="/admin/dashboard" class="nav-item <%= page === 'dashboard' ? 'active' : '' %>">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z" />
+                </svg>
+                <span>Dashboard</span>
+            </a>
+            <a href="/admin/siswa" class="nav-item <%= page === 'siswa' ? 'active' : '' %>">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z" />
+                </svg>
+                <span>Data Siswa</span>
+            </a>
+            <a href="/admin/bantuan" class="nav-item <%= page === 'bantuan' ? 'active' : '' %>">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+                </svg>
+                <span>Data Bantuan</span>
+            </a>
+            <a href="/admin/pengajuan-rekening" class="nav-item <%= page === 'pengajuan-rekening' ? 'active' : '' %>">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9H9V9h10v2zm-4 4H9v-2h6v2zm4-8H9V5h10v2z"/>
+                </svg>
+                <span>Pengajuan Rekening</span>
+            </a>
+            <a href="/admin/laporan-bantuan" class="nav-item <%= page === 'laporan-bantuan' ? 'active' : '' %>">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+                </svg>
+                <span>Laporan Bantuan</span>
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="user-info">
+                <div class="user-avatar">
+                    <%= user.nama.charAt(0).toUpperCase() %>
+                </div>
+                <div class="user-details">
+                    <h4>
+                        <%= user.nama %>
+                    </h4>
+                    <p>Administrator</p>
+                </div>
+            </div>
+            <a href="/logout" class="btn-logout">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z" />
+                </svg>
+                Logout
+            </a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="top-header">
+            <button class="menu-toggle" onclick="toggleSidebar()">
+                <svg viewBox="0 0 24 24">
+                    <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
+                </svg>
+            </button>
+            <div class="header-title">
+                <h1>Detail Siswa</h1>
+            </div>
+            <div class="header-actions">
+                <a href="/admin/siswa" class="btn btn-outline">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" />
+                    </svg>
+                    Kembali
+                </a>
+                <a href="/admin/siswa/edit/<%= siswa.id %>" class="btn btn-primary">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
+                    </svg>
+                    Edit
+                </a>
+            </div>
+        </header>
+
+        <div class="page-content">
+            <div class="profile-card">
+                <div class="profile-header">
+                    <div class="profile-avatar">
+                        <%= siswa.nama.charAt(0).toUpperCase() %>
+                    </div>
+                    <div class="profile-info">
+                        <h2>
+                            <%= siswa.nama %>
+                        </h2>
+                        <p>
+                            <%= siswa.kelas || 'Kelas belum ditentukan' %> • <%= siswa.nik_siswa || '-' %>
+                        </p>
+                        <div class="profile-badges">
+                            <% if (siswa.program_bantuan) { %>
+                                <% if (siswa.program_bantuan.includes('Tangerang Cerdas')) { %>
+                                    <span class="badge badge-primary">Tangerang Cerdas</span>
+                                    <% } %>
+                                        <% if (siswa.program_bantuan.includes('PIP')) { %>
+                                            <span class="badge badge-success">PIP</span>
+                                            <% } %>
+                                                <% } %>
+                                                    <% if (siswa.status_pencairan==='Sudah Cair' ) { %>
+                                                        <span class="badge badge-success">Sudah Cair</span>
+                                                        <% } else { %>
+                                                            <span class="badge badge-warning">Belum Cair</span>
+                                                            <% } %>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="profile-body">
+                    <div class="info-grid">
+                        <div class="info-section">
+                            <div class="info-section-title">
+                                <svg viewBox="0 0 24 24">
+                                    <path
+                                        d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                                </svg>
+                                Data Diri
+                            </div>
+                            <div class="info-row"><span class="info-label">NIK</span><span class="info-value">
+                                    <%= siswa.nik_siswa || '-' %>
+                                </span></div>
+                            <div class="info-row"><span class="info-label">NISN</span><span class="info-value">
+                                    <%= siswa.nisn || '-' %>
+                                </span></div>
+                            <div class="info-row"><span class="info-label">Tempat Lahir</span><span class="info-value">
+                                    <%= siswa.tempat_lahir || '-' %>
+                                </span></div>
+                            <div class="info-row"><span class="info-label">Tanggal Lahir</span><span class="info-value">
+                                    <%= siswa.tanggal_lahir_format || '-' %>
+                                </span></div>
+                            <div class="info-row"><span class="info-label">Agama</span><span class="info-value">
+                                    <%= siswa.agama || '-' %>
+                                </span></div>
+                            <div class="info-row"><span class="info-label">No. KK</span><span class="info-value">
+                                    <%= siswa.no_kk || '-' %>
+                                </span></div>
+                        </div>
+
+                        <div class="info-section">
+                            <div class="info-section-title">
+                                <svg viewBox="0 0 24 24">
+                                    <path
+                                        d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5z" />
+                                </svg>
+                                Data Orang Tua
+                            </div>
+                            <div class="info-row"><span class="info-label">Status Orang Tua</span><span class="info-value">
+                                    <%= siswa.status_ortu || 'Lengkap' %>
+                                </span></div>
+                            <div class="info-row"><span class="info-label">NIK Ayah</span><span class="info-value">
+                                    <%= siswa.nik_ayah || '-' %>
+                                </span></div>
+                            <div class="info-row"><span class="info-label">Nama Ayah</span><span class="info-value">
+                                    <%= siswa.nama_ayah || '-' %>
+                                </span></div>
+                            <div class="info-row"><span class="info-label">NIK Ibu</span><span class="info-value">
+                                    <%= siswa.nik_ibu || '-' %>
+                                </span></div>
+                            <div class="info-row"><span class="info-label">Nama Ibu</span><span class="info-value">
+                                    <%= siswa.nama_ibu || '-' %>
+                                </span></div>
+                            <div class="info-row"><span class="info-label">NIK Wali</span><span class="info-value">
+                                    <%= siswa.nik_wali || '-' %>
+                                </span></div>
+                            <div class="info-row"><span class="info-label">Nama Wali</span><span class="info-value">
+                                    <%= siswa.nama_wali || '-' %>
+                                </span></div>
+                        </div>
+
+                        <div class="info-section">
+                            <div class="info-section-title">
+                                <svg viewBox="0 0 24 24">
+                                    <path
+                                        d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+                                </svg>
+                                Alamat
+                            </div>
+                            <div class="info-row"><span class="info-label">Alamat</span><span class="info-value">
+                                    <%= siswa.alamat || '-' %>
+                                </span></div>
+                            <div class="info-row"><span class="info-label">RT/RW</span><span class="info-value">
+                                    <%= siswa.rt || '-' %>/<%= siswa.rw || '-' %>
+                                </span></div>
+                            <div class="info-row"><span class="info-label">Kelurahan</span><span class="info-value">
+                                    <%= siswa.kelurahan || '-' %>
+                                </span></div>
+                            <div class="info-row"><span class="info-label">Kecamatan</span><span class="info-value">
+                                    <%= siswa.kecamatan || '-' %>
+                                </span></div>
+                            <div class="info-row"><span class="info-label">Kota</span><span class="info-value">
+                                    <%= siswa.kota || '-' %>
+                                </span></div>
+                            <div class="info-row"><span class="info-label">Provinsi</span><span class="info-value">
+                                    <%= siswa.provinsi || '-' %>
+                                </span></div>
+                        </div>
+
+                        <div class="info-section">
+                            <div class="info-section-title">
+                                <svg viewBox="0 0 24 24">
+                                    <path
+                                        d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z" />
+                                </svg>
+                                Data Bantuan
+                            </div>
+                            <div class="info-row"><span class="info-label">DTKS (Desil)</span><span class="info-value">
+                                    <%= siswa.dtks || '-' %>
+                                </span></div>
+                            <div class="info-row"><span class="info-label">Status Kota</span><span class="info-value">
+                                    <%= siswa.desil || '-' %>
+                                </span></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Data Rekening Bank moved into Riwayat Bantuan -->
+                    
+                    <!-- Riwayat Bantuan Section -->
+                    <div style="margin-top: 2rem;">
+                        <div class="info-section-title" style="display: flex; justify-content: space-between; align-items: center;">
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <svg viewBox="0 0 24 24" style="width: 20px; height: 20px; fill: var(--accent);">
+                                    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z" />
+                                </svg>
+                                Riwayat Bantuan Siswa
+                            </div>
+                            <button onclick="openModalBantuan()" class="btn btn-primary" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;">
+                                + Tambah Riwayat Bantuan
+                            </button>
+                        </div>
+                        
+                        <div class="rekening-list" style="margin-top: 1rem;">
+                            <% if (statusBantuan && statusBantuan.length > 0) { %>
+                                <% statusBantuan.forEach(sb => { 
+                                    const rek = rekening ? rekening.find(r => r.status_bantuan_id === sb.id) : null;
+                                %>
+                                    <div class="rek-card" style="border-left: 4px solid var(--accent); flex-direction: column; align-items: stretch;">
+                                        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                            <div class="rek-info">
+                                                <h4><%= sb.bantuan_nama %></h4>
+                                                <p>Tahun: <%= sb.tahun %> | Semester: <%= sb.semester %> <%= sb.triwulan ? '| Triwulan: ' + sb.triwulan : '' %></p>
+                                                <div style="margin-top: 0.5rem; display: flex; gap: 0.5rem;">
+                                                    <span class="badge <%= sb.status_pencairan === 'Sudah Cair' ? 'badge-success' : 'badge-warning' %>">
+                                                        Status: <%= sb.status_pencairan || 'Pending' %>
+                                                    </span>
+                                                    <% if(sb.tanggal_pencairan) { %>
+                                                        <span class="badge badge-primary">Tgl Cair: <%= new Date(sb.tanggal_pencairan).toLocaleDateString('id-ID') %></span>
+                                                    <% } %>
+                                                </div>
+                                            </div>
+                                            <div class="rek-actions">
+                                                <button onclick="editBantuan('<%= sb.id %>', '<%= sb.bantuan_id %>', '<%= sb.tahun %>', '<%= sb.semester %>', '<%= sb.triwulan || '' %>', '<%= sb.status_pencairan %>', '<%= sb.tanggal_pencairan ? sb.tanggal_pencairan.toISOString().split('T')[0] : '' %>', '<%= sb.pengajuan || '' %>')" class="btn btn-outline" style="color: var(--secondary); border-color: var(--secondary);">
+                                                    Edit
+                                                </button>
+                                                <button onclick="deleteBantuan('<%= sb.id %>')" class="btn btn-outline" style="color: var(--danger); border-color: var(--danger);">
+                                                    Hapus
+                                                </button>
+                                            </div>
+                                        </div>
+                                        
+                                        <hr style="border: 0; border-top: 1px dashed var(--border); margin: 1rem 0;">
+                                        
+                                        <!-- Data Rekening untuk Bantuan Ini -->
+                                        <div>
+                                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                                                <h5 style="margin: 0; color: var(--text-secondary); display: flex; align-items: center; gap: 0.3rem;">
+                                                    <svg viewBox="0 0 24 24" style="width: 16px; height: 16px; fill: currentColor;">
+                                                        <path d="M4 10h3v7H4zM10.5 10h3v7h-3zM2 19h20v3H2zM17 10h3v7h-3zM12 1L2 6v2h20V6z"/>
+                                                    </svg>
+                                                    Data Rekening
+                                                </h5>
+                                                <% if(!rek) { %>
+                                                    <button onclick="openModalRekening('<%= sb.id %>')" class="btn btn-outline" style="padding: 0.2rem 0.5rem; font-size: 0.75rem; color: var(--primary); border-color: var(--primary);">
+                                                        + Tambah Rekening
+                                                    </button>
+                                                <% } %>
+                                            </div>
+                                            
+                                            <% if(rek) { %>
+                                                <div style="display: flex; justify-content: space-between; align-items: center; background: var(--bg-light); padding: 0.8rem; border-radius: 8px;">
+                                                    <div>
+                                                        <% if(rek.status_kepemilikan === 'Pengajuan') { %>
+                                                            <div style="font-weight: 500; color: var(--primary);">Pengajuan Rekening Baru</div>
+                                                            <div style="font-size: 0.85rem; color: var(--text-secondary);">A.n <%= siswa.nama_ibu || siswa.nama_ayah || 'Data Ortu' %></div>
+                                                        <% } else { %>
+                                                            <div style="font-weight: 500;"><%= rek.nama_bank %> - <%= rek.no_rekening %></div>
+                                                            <div style="font-size: 0.85rem; color: var(--text-secondary);">A.n <%= rek.atas_nama %></div>
+                                                        <% } %>
+                                                        
+                                                        <div style="margin-top: 0.5rem; display: flex; gap: 0.5rem;">
+                                                            <% if(rek.file_buku_rekening) { %>
+                                                                <a href="<%= rek.file_buku_rekening %>" target="_blank" class="badge badge-primary" style="text-decoration: none;">📄 Buku Rekening</a>
+                                                            <% } %>
+                                                            <% if(rek.file_ktp_ortu) { %>
+                                                                <a href="<%= rek.file_ktp_ortu %>" target="_blank" class="badge badge-primary" style="text-decoration: none;">📄 KTP Ortu</a>
+                                                            <% } %>
+                                                            <% if(rek.file_kk) { %>
+                                                                <a href="<%= rek.file_kk %>" target="_blank" class="badge badge-primary" style="text-decoration: none;">📄 KK</a>
+                                                            <% } %>
+                                                        </div>
+                                                    </div>
+                                                    <div style="display: flex; gap: 0.5rem; align-items: center;">
+                                                        <button onclick="editRekening('<%= rek.id %>', '<%= rek.nama_bank %>', '<%= rek.no_rekening %>', '<%= rek.atas_nama %>', '<%= rek.keterangan %>', '<%= sb.id %>', '<%= rek.status_kepemilikan %>')" class="btn-icon" style="color: var(--secondary);" title="Edit Rekening">
+                                                            <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: currentColor;"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+                                                        </button>
+                                                        <button onclick="deleteRekening('<%= rek.id %>')" class="btn-icon" style="color: var(--danger);" title="Hapus Rekening">
+                                                            <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: currentColor;"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            <% } else { %>
+                                                <div style="font-size: 0.85rem; color: var(--text-secondary); font-style: italic;">Belum ada rekening tertaut.</div>
+                                            <% } %>
+                                        </div>
+                                    </div>
+                                <% }); %>
+                            <% } else { %>
+                                <div style="text-align: center; padding: 2rem; background: var(--bg-light); border-radius: 12px; border: 1px dashed var(--border); color: var(--text-secondary);">
+                                    Belum ada riwayat bantuan untuk siswa ini.
+                                </div>
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal Rekening -->
+    <div class="modal-overlay" id="modalRekening">
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-header">
+                <h3 id="modalRekeningTitle">Tambah Rekening Bank</h3>
+                <button class="btn-close" onclick="closeModalRekening()">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+                    </svg>
+                </button>
+            </div>
+            
+            <!-- Step 1: Pilihan Kepemilikan -->
+            <div id="rekeningStep1">
+                <p style="margin-bottom: 1.5rem; text-align: center; font-size: 1.1rem; padding: 1rem 0;">Apakah siswa sudah memiliki buku rekening untuk bantuan ini?</p>
+                <div style="display: flex; gap: 1rem; justify-content: center;">
+                    <button class="btn btn-primary" onclick="showRekeningForm('Punya')" style="flex: 1; padding: 0.8rem;">Sudah Punya</button>
+                    <button class="btn btn-outline" onclick="showRekeningForm('Pengajuan')" style="flex: 1; padding: 0.8rem; border-color: var(--primary); color: var(--primary);">Belum (Ajukan Baru)</button>
+                </div>
+            </div>
+
+            <!-- Step 2: Form Input -->
+            <form id="formRekening" style="display: none;" enctype="multipart/form-data">
+                <input type="hidden" id="rek_id" name="id">
+                <input type="hidden" id="rek_siswa_id" name="siswa_id" value="<%= siswa.id %>">
+                <input type="hidden" id="rek_status_bantuan_id" name="status_bantuan_id" value="">
+                <input type="hidden" id="rek_status_kepemilikan" name="status_kepemilikan" value="">
+                
+                <!-- Section Punya Rekening -->
+                <div id="sectionPunya" style="display: none;">
+                    <div class="form-group">
+                        <label>Nama Bank</label>
+                        <select class="form-control" id="rek_nama_bank" name="nama_bank">
+                            <option value="">Pilih Bank</option>
+                            <option value="BRI">BRI</option>
+                            <option value="BNI">BNI</option>
+                            <option value="Mandiri">Mandiri</option>
+                            <option value="BJB">BJB</option>
+                            <option value="BCA">BCA</option>
+                            <option value="BSI">BSI</option>
+                            <option value="BCA Syariah">BCA Syariah</option>
+                            <option value="BJB Syariah">BJB Syariah</option>
+                            <option value="Bank Mega">Bank Mega</option>
+                            <option value="CIMB Niaga">CIMB Niaga</option>
+                            <option value="Bank Muamalat">Bank Muamalat</option>
+                            <option value="BTN">BTN</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Nomor Rekening</label>
+                        <input type="text" class="form-control" id="rek_no_rekening" name="no_rekening" placeholder="Contoh: 1234567890">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Nama Pemilik Rekening</label>
+                        <input type="text" class="form-control" id="rek_atas_nama" name="atas_nama" placeholder="Sesuai buku tabungan">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Upload Foto Buku Rekening <span style="color: red;">*</span></label>
+                        <input type="file" class="form-control" id="file_buku_rekening" name="file_buku_rekening" accept="image/*,.pdf" style="padding: 0.5rem; height: auto;">
+                        <small style="color: var(--text-secondary); display: block; margin-top: 0.3rem;">Format: JPG, PNG, atau PDF.</small>
+                    </div>
+                </div>
+
+                <!-- Section Pengajuan Rekening -->
+                <div id="sectionAjukan" style="display: none;">
+                    <div class="form-group">
+                        <label>Nama Siswa</label>
+                        <input type="text" class="form-control" id="aju_nama_siswa" value="<%= siswa.nama %>" readonly style="background-color: var(--bg-light);">
+                    </div>
+                    <div class="form-group">
+                        <label>NIK Siswa</label>
+                        <input type="text" class="form-control" value="<%= siswa.nik_siswa %>" readonly style="background-color: var(--bg-light);">
+                    </div>
+                    <div class="form-group">
+                        <label>Siapa orang tua yang bertanggung jawab atas rekening tersebut?</label>
+                        <select class="form-control" id="aju_penanggung_jawab" onchange="updateKeteranganAtasNama()">
+                            <option value="">-- Pilih Penanggung Jawab --</option>
+                            <% if (siswa.nama_ayah) { %><option value="<%= siswa.nama_ayah %>">Ayah: <%= siswa.nama_ayah %></option><% } %>
+                            <% if (siswa.nama_ibu) { %><option value="<%= siswa.nama_ibu %>">Ibu: <%= siswa.nama_ibu %></option><% } %>
+                            <% if (siswa.nama_wali) { %><option value="<%= siswa.nama_wali %>">Wali: <%= siswa.nama_wali %></option><% } %>
+                        </select>
+                        <small id="keteranganAtasNama" style="color: var(--secondary); display: block; margin-top: 0.5rem;"></small>
+                    </div>
+                    <div class="form-group">
+                        <label>Upload Foto KTP Orang Tua <span style="color: red;">*</span></label>
+                        <input type="file" class="form-control" id="file_ktp_ortu" name="file_ktp_ortu" accept="image/*,.pdf" style="padding: 0.5rem; height: auto;">
+                    </div>
+                    <div class="form-group">
+                        <label>Upload Foto Kartu Keluarga <span style="color: red;">*</span></label>
+                        <input type="file" class="form-control" id="file_kk" name="file_kk" accept="image/*,.pdf" style="padding: 0.5rem; height: auto;">
+                    </div>
+                    <div class="alert" style="background-color: #e3f2fd; color: #0d47a1; padding: 1rem; border-radius: 8px; margin-top: 1rem; font-size: 0.85rem;">
+                        <strong>Info:</strong> Rekening akan diajukan menggunakan data siswa dan orang tua di atas.
+                    </div>
+                </div>
+                
+                <div class="form-group" style="display: none;">
+                    <label>Keterangan (Opsional)</label>
+                    <input type="text" class="form-control" id="rek_keterangan" name="keterangan" placeholder="Contoh: PIP, KJP">
+                </div>
+                
+                <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                    <button type="button" class="btn btn-outline" style="flex: 1; justify-content: center;" onclick="resetRekeningModal()">Kembali</button>
+                    <button type="submit" class="btn btn-primary" style="flex: 1; justify-content: center;">Simpan Data</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Riwayat Bantuan -->
+    <div class="modal-overlay" id="modalBantuan">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalBantuanTitle">Tambah Riwayat Bantuan</h3>
+                <button class="btn-close" onclick="closeModalBantuan()">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+                    </svg>
+                </button>
+            </div>
+            <form id="formBantuan">
+                <input type="hidden" id="ban_id" name="id">
+                <input type="hidden" id="ban_siswa_id" name="siswa_id" value="<%= siswa.id %>">
+                
+                <div class="form-group">
+                    <label>Jenis Bantuan</label>
+                    <select class="form-control" id="ban_bantuan_id" name="bantuan_id" required>
+                        <option value="">-- Pilih Jenis Bantuan --</option>
+                        <% if (masterBantuan && masterBantuan.length > 0) { %>
+                            <% masterBantuan.forEach(mb => { %>
+                                <option value="<%= mb.id %>"><%= mb.nama %></option>
+                            <% }) %>
+                        <% } %>
+                    </select>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label>Tahun</label>
+                        <input type="number" class="form-control" id="ban_tahun" name="tahun" placeholder="Contoh: 2024" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Semester</label>
+                        <select class="form-control" id="ban_semester" name="semester" required>
+                            <option value="1">1 (Ganjil)</option>
+                            <option value="2">2 (Genap)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Triwulan (Opsional)</label>
+                    <select class="form-control" id="ban_triwulan" name="triwulan">
+                        <option value="">Tidak ada</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                    </select>
+                </div>
+                
+                <div class="form-group" style="display: none;">
+                    <label>Status Pencairan</label>
+                    <input type="hidden" id="ban_status_pencairan" name="status_pencairan" value="Pengajuan">
+                </div>
+
+                <div class="form-group">
+                    <label>Tanggal Pencairan (Opsional)</label>
+                    <input type="date" class="form-control" id="ban_tanggal_pencairan" name="tanggal_pencairan">
+                </div>
+
+                <div class="form-group" style="display: none;">
+                    <label>Pengajuan</label>
+                    <input type="text" class="form-control" id="ban_pengajuan" name="pengajuan" placeholder="Status Pengajuan">
+                </div>
+                
+                <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                    <button type="button" class="btn btn-outline" style="flex: 1; justify-content: center;" onclick="closeModalBantuan()">Batal</button>
+                    <button type="submit" class="btn btn-primary" style="flex: 1; justify-content: center;">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('active');
+            document.getElementById('sidebarOverlay').classList.toggle('active');
+        }
+
+        // Modal Rekening Logic
+        const modalRekening = document.getElementById('modalRekening');
+        const formRekening = document.getElementById('formRekening');
+        
+        function openModalRekening(status_bantuan_id = '') {
+            document.getElementById('modalRekeningTitle').textContent = 'Tambah Rekening Bank';
+            formRekening.reset();
+            document.getElementById('rek_id').value = '';
+            document.getElementById('rek_siswa_id').value = '<%= siswa.id %>';
+            document.getElementById('rek_status_bantuan_id').value = status_bantuan_id;
+            
+            resetRekeningModal();
+            modalRekening.classList.add('active');
+        }
+
+        function resetRekeningModal() {
+            document.getElementById('rekeningStep1').style.display = 'block';
+            document.getElementById('formRekening').style.display = 'none';
+            document.getElementById('sectionPunya').style.display = 'none';
+            document.getElementById('sectionAjukan').style.display = 'none';
+            
+            // reset required fields
+            document.getElementById('rek_nama_bank').required = false;
+            document.getElementById('rek_no_rekening').required = false;
+            document.getElementById('rek_atas_nama').required = false;
+            document.getElementById('file_buku_rekening').required = false;
+            document.getElementById('file_ktp_ortu').required = false;
+            document.getElementById('file_kk').required = false;
+        }
+
+        function showRekeningForm(type) {
+            document.getElementById('rekeningStep1').style.display = 'none';
+            document.getElementById('formRekening').style.display = 'block';
+            document.getElementById('rek_status_kepemilikan').value = type;
+
+            if (type === 'Punya') {
+                document.getElementById('sectionPunya').style.display = 'block';
+                document.getElementById('sectionAjukan').style.display = 'none';
+                
+                document.getElementById('rek_nama_bank').required = true;
+                document.getElementById('rek_no_rekening').required = true;
+                document.getElementById('rek_atas_nama').required = true;
+                if (!document.getElementById('rek_id').value) {
+                    document.getElementById('file_buku_rekening').required = true;
+                }
+            } else {
+                document.getElementById('sectionAjukan').style.display = 'block';
+                document.getElementById('sectionPunya').style.display = 'none';
+                
+                if (!document.getElementById('rek_id').value) {
+                    document.getElementById('file_ktp_ortu').required = true;
+                    document.getElementById('file_kk').required = true;
+                }
+                
+                // Set default bank if required for pengajuan
+                document.getElementById('rek_nama_bank').value = ''; 
+                
+                // Clear the penanggung jawab selection
+                const selectPj = document.getElementById('aju_penanggung_jawab');
+                if (selectPj) selectPj.value = '';
+                document.getElementById('keteranganAtasNama').innerHTML = '';
+            }
+        }
+
+        function updateKeteranganAtasNama() {
+            const pj = document.getElementById('aju_penanggung_jawab').value;
+            const namaSiswa = document.getElementById('aju_nama_siswa').value;
+            const ketElem = document.getElementById('keteranganAtasNama');
+            const rekAtasNama = document.getElementById('rek_atas_nama');
+            
+            if (pj) {
+                const atasNama = pj + ' QQ ' + namaSiswa;
+                ketElem.innerHTML = 'Nama pada buku rekening adalah: <strong>' + atasNama + '</strong>';
+                rekAtasNama.value = atasNama; 
+            } else {
+                ketElem.innerHTML = '';
+                rekAtasNama.value = '';
+            }
+        }
+
+        function editRekening(id, bank, no, nama, ket, status_bantuan_id, status_kepemilikan) {
+            document.getElementById('modalRekeningTitle').textContent = 'Edit Rekening Bank';
+            document.getElementById('rek_id').value = id;
+            document.getElementById('rek_siswa_id').value = '<%= siswa.id %>';
+            document.getElementById('rek_status_bantuan_id').value = status_bantuan_id || '';
+            document.getElementById('rek_nama_bank').value = bank || '';
+            document.getElementById('rek_no_rekening').value = no || '';
+            document.getElementById('rek_atas_nama').value = nama || '';
+            document.getElementById('rek_keterangan').value = ket || '';
+            
+            showRekeningForm(status_kepemilikan || 'Punya');
+            
+            // disable required files for edit
+            document.getElementById('file_buku_rekening').required = false;
+            document.getElementById('file_ktp_ortu').required = false;
+            document.getElementById('file_kk').required = false;
+            
+            modalRekening.classList.add('active');
+        }
+
+        function closeModalRekening() {
+            modalRekening.classList.remove('active');
+        }
+
+        formRekening.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(formRekening);
+            
+            try {
+                const response = await fetch('/api/admin/rekening', {
+                    method: 'POST',
+                    body: formData
+                });
+                const result = await response.json();
+                if (result.success) {
+                    location.reload();
+                } else {
+                    alert(result.message);
+                }
+            } catch (error) {
+                console.error(error);
+                alert('Gagal menyimpan data rekening!');
+            }
+        });
+
+        async function deleteRekening(id) {
+            if (!confirm('Apakah Anda yakin ingin menghapus rekening ini?')) return;
+            
+            try {
+                const res = await fetch(`/api/admin/rekening/${id}`, { method: 'DELETE' });
+                const result = await res.json();
+                if (result.success) {
+                    alert(result.message);
+                    window.location.reload();
+                } else {
+                    alert(result.message || 'Terjadi kesalahan!');
+                }
+            } catch (error) {
+                console.error(error);
+                alert('Gagal menghapus rekening!');
+            }
+        }
+
+        // Modal Bantuan Logic
+        const modalBantuan = document.getElementById('modalBantuan');
+        const formBantuan = document.getElementById('formBantuan');
+
+        function openModalBantuan() {
+            document.getElementById('modalBantuanTitle').textContent = 'Tambah Riwayat Bantuan';
+            formBantuan.reset();
+            document.getElementById('ban_id').value = '';
+            document.getElementById('ban_siswa_id').value = '<%= siswa.id %>';
+            // Set current year as default
+            document.getElementById('ban_tahun').value = new Date().getFullYear();
+            modalBantuan.classList.add('active');
+        }
+
+        function editBantuan(id, bantuan_id, tahun, semester, triwulan, status, tgl, pengajuan) {
+            document.getElementById('modalBantuanTitle').textContent = 'Edit Riwayat Bantuan';
+            document.getElementById('ban_id').value = id;
+            document.getElementById('ban_siswa_id').value = '<%= siswa.id %>';
+            document.getElementById('ban_bantuan_id').value = bantuan_id;
+            document.getElementById('ban_tahun').value = tahun;
+            document.getElementById('ban_semester').value = semester;
+            document.getElementById('ban_triwulan').value = triwulan;
+            document.getElementById('ban_status_pencairan').value = status;
+            
+            // Reformat tgl properly (it comes in as YYYY-MM-DD from toISOString)
+            if (tgl && tgl !== 'undefined' && tgl !== '') {
+                const dateParts = tgl.split('-');
+                if(dateParts.length === 3) {
+                    document.getElementById('ban_tanggal_pencairan').value = tgl;
+                }
+            } else {
+                document.getElementById('ban_tanggal_pencairan').value = '';
+            }
+            
+            document.getElementById('ban_pengajuan').value = pengajuan;
+            modalBantuan.classList.add('active');
+        }
+
+        function closeModalBantuan() {
+            modalBantuan.classList.remove('active');
+        }
+
+        formBantuan.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(formBantuan);
+            const data = Object.fromEntries(formData.entries());
+
+            try {
+                const res = await fetch('/api/admin/status-bantuan', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                const result = await res.json();
+                if (result.success) {
+                    alert(result.message);
+                    window.location.reload();
+                } else {
+                    alert(result.message || 'Terjadi kesalahan!');
+                }
+            } catch (error) {
+                console.error(error);
+                alert('Gagal menyimpan data bantuan!');
+            }
+        });
+
+        async function deleteBantuan(id) {
+            if (!confirm('Apakah Anda yakin ingin menghapus riwayat bantuan ini?')) return;
+            
+            try {
+                const res = await fetch(`/api/admin/status-bantuan/${id}`, { method: 'DELETE' });
+                const result = await res.json();
+                if (result.success) {
+                    alert(result.message);
+                    window.location.reload();
+                } else {
+                    alert(result.message || 'Terjadi kesalahan!');
+                }
+            } catch (error) {
+                console.error(error);
+                alert('Gagal menghapus bantuan!');
+            }
+        }
+    </script>
+</body>
+
+</html>

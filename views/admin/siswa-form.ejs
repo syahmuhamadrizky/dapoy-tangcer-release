@@ -1,0 +1,1186 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        <%= title %> - Bantuan Siswa Tangerang
+    </title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #1E3A5F;
+            --primary-light: #2D4A6F;
+            --secondary: #3B82F6;
+            --accent: #06B6D4;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --bg-light: #F0F9FF;
+            --bg-card: #FFFFFF;
+            --text-primary: #1E293B;
+            --text-secondary: #64748B;
+            --border: #E2E8F0;
+            --sidebar-width: 260px;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-light);
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: linear-gradient(180deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            z-index: 1000;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-icon svg {
+            width: 25px;
+            height: 25px;
+            fill: white;
+        }
+
+        .logo-text h2 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .logo-text p {
+            font-size: 0.7rem;
+            opacity: 0.7;
+        }
+
+        .sidebar-nav {
+            padding: 1rem 0;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 0.875rem 1.5rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            border-left: 3px solid transparent;
+            gap: 0.75rem;
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+        }
+
+        .nav-item.active {
+            border-left-color: var(--accent);
+        }
+
+        .nav-item svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .nav-item span {
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .sidebar-footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 1rem 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: var(--accent);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+
+        .user-details h4 {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .user-details p {
+            font-size: 0.75rem;
+            opacity: 0.7;
+        }
+
+        .btn-logout {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            width: 100%;
+            margin-top: 1rem;
+            padding: 0.75rem;
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 10px;
+            color: #FCA5A5;
+            font-size: 0.85rem;
+            cursor: pointer;
+            text-decoration: none;
+            justify-content: center;
+        }
+
+        .btn-logout:hover {
+            background: rgba(239, 68, 68, 0.3);
+            color: white;
+        }
+
+        .btn-logout svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .main-content {
+            margin-left: var(--sidebar-width);
+            min-height: 100vh;
+        }
+
+        .top-header {
+            background: var(--bg-card);
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            background: var(--bg-light);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: var(--border);
+        }
+
+        .back-btn svg {
+            width: 24px;
+            height: 24px;
+            fill: var(--text-primary);
+        }
+
+        .header-title h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .header-title p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .page-content {
+            padding: 2rem;
+        }
+
+        .form-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .card-header h3 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .card-header h3 svg {
+            width: 22px;
+            height: 22px;
+            fill: var(--secondary);
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        .form-section {
+            margin-bottom: 2rem;
+        }
+
+        .form-section-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-section-title svg {
+            width: 20px;
+            height: 20px;
+            fill: var(--secondary);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.25rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .form-label span {
+            color: var(--danger);
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease;
+            background: var(--bg-light);
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--secondary);
+            background: var(--bg-card);
+        }
+
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-hint {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border);
+            margin-top: 1.5rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            border: none;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .btn-secondary {
+            background: var(--bg-light);
+            color: var(--text-secondary);
+            border: 2px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--secondary);
+            color: var(--secondary);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--accent) 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(59, 130, 246, 0.4);
+        }
+
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--success);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            display: none;
+            align-items: center;
+            gap: 0.75rem;
+            z-index: 3000;
+            animation: slideIn 0.3s ease;
+        }
+
+        .toast.error {
+            background: var(--danger);
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .toast svg {
+            width: 24px;
+            height: 24px;
+            fill: white;
+        }
+
+        .toast-message {
+            font-weight: 500;
+        }
+
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        .menu-toggle {
+            display: none;
+            background: var(--bg-light);
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 10px;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .menu-toggle svg {
+            width: 24px;
+            height: 24px;
+            fill: var(--text-primary);
+        }
+
+        @media (max-width: 1024px) {
+            :root {
+                --sidebar-width: 220px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            :root {
+                --sidebar-width: 0px;
+            }
+
+            .sidebar {
+                transform: translateX(-100%);
+                width: 280px;
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .sidebar-overlay.active {
+                display: block;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            .top-header {
+                padding: 1rem;
+            }
+
+            .header-title h1 {
+                font-size: 1.2rem;
+            }
+
+            .page-content {
+                padding: 1rem;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-actions {
+                flex-direction: column;
+            }
+
+            .form-actions .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">
+                <div class="logo-icon"><svg viewBox="0 0 24 24">
+                        <path
+                            d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z" />
+                    </svg></div>
+                <div class="logo-text">
+                    <h2>Bantuan Siswa</h2>
+                    <p>Tangerang</p>
+                </div>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="/admin/dashboard" class="nav-item <%= page === 'dashboard' ? 'active' : '' %>">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z" />
+                </svg>
+                <span>Dashboard</span>
+            </a>
+            <a href="/admin/siswa" class="nav-item <%= page === 'siswa' ? 'active' : '' %>">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z" />
+                </svg>
+                <span>Data Siswa</span>
+            </a>
+            <a href="/admin/bantuan" class="nav-item <%= page === 'bantuan' ? 'active' : '' %>">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+                </svg>
+                <span>Data Bantuan</span>
+            </a>
+            <a href="/admin/pengajuan-rekening" class="nav-item <%= page === 'pengajuan-rekening' ? 'active' : '' %>">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9H9V9h10v2zm-4 4H9v-2h6v2zm4-8H9V5h10v2z"/>
+                </svg>
+                <span>Pengajuan Rekening</span>
+            </a>
+            <a href="/admin/laporan-bantuan" class="nav-item <%= page === 'laporan-bantuan' ? 'active' : '' %>">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+                </svg>
+                <span>Laporan Bantuan</span>
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="user-info">
+                <div class="user-avatar">
+                    <%= user.nama.charAt(0).toUpperCase() %>
+                </div>
+                <div class="user-details">
+                    <h4>
+                        <%= user.nama %>
+                    </h4>
+                    <p>Administrator</p>
+                </div>
+            </div>
+            <a href="/logout" class="btn-logout">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z" />
+                </svg>
+                Logout
+            </a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="top-header">
+            <button class="menu-toggle" onclick="toggleSidebar()">
+                <svg viewBox="0 0 24 24">
+                    <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
+                </svg>
+            </button>
+            <div class="header-title">
+                <h1>
+                    <%= title %>
+                </h1>
+                <p>Form <%= siswa ? 'edit' : 'tambah' %> data siswa</p>
+            </div>
+        </header>
+
+        <div class="page-content">
+            <div class="form-card">
+                <div class="card-header">
+                    <svg viewBox="0 0 24 24">
+                        <path
+                            d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                    </svg>
+                    <h3>
+                        <%= title %>
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <form id="siswaForm">
+                        <input type="hidden" name="id" value="<%= siswa ? siswa.id : '' %>">
+                        <input type="hidden" name="uuid" value="<%= siswa ? siswa.uuid : '' %>">
+
+                        <div class="form-section">
+                            <div class="form-section-title">
+                                <svg viewBox="0 0 24 24">
+                                    <path
+                                        d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                                </svg>
+                                Data Diri Siswa
+                            </div>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label class="form-label">Nama Lengkap <span>*</span></label>
+                                    <input type="text" class="form-input" name="nama"
+                                        value="<%= siswa ? siswa.nama : '' %>" required
+                                        placeholder="Masukkan nama lengkap">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Kelas</label>
+                                    <input type="text" class="form-input" name="kelas"
+                                        value="<%= siswa ? siswa.kelas : '' %>" placeholder="Contoh: Kelas 1A">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">NIK Siswa <span>*</span></label>
+                                    <input type="text" class="form-input" name="nik_siswa"
+                                        value="<%= siswa ? siswa.nik_siswa : '' %>" required maxlength="16"
+                                        placeholder="16 digit NIK">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">NISN</label>
+                                    <input type="text" class="form-input" name="nisn"
+                                        value="<%= siswa ? siswa.nisn : '' %>" placeholder="Nomor NISN">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Tempat Lahir</label>
+                                    <input type="text" class="form-input" name="tempat_lahir"
+                                        value="<%= siswa ? siswa.tempat_lahir : '' %>" placeholder="Kota kelahiran">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Tanggal Lahir</label>
+                                    <input type="text" class="form-input" name="tanggal_lahir"
+                                        value="<%= siswa && siswa.tanggal_lahir ? new Date(siswa.tanggal_lahir).toLocaleDateString('en-GB') : '' %>"
+                                        placeholder="Pilih Tanggal Lahir (DD/MM/YYYY)">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Agama</label>
+                                    <select class="form-select" name="agama">
+                                        <option value="">Pilih Agama</option>
+                                        <option value="Islam" <%=siswa && siswa.agama==='Islam' ? 'selected' : '' %>
+                                            >Islam</option>
+                                        <option value="Kristen" <%=siswa && siswa.agama==='Kristen' ? 'selected' : '' %>
+                                            >Kristen</option>
+                                        <option value="Katolik" <%=siswa && siswa.agama==='Katolik' ? 'selected' : '' %>
+                                            >Katolik</option>
+                                        <option value="Hindu" <%=siswa && siswa.agama==='Hindu' ? 'selected' : '' %>
+                                            >Hindu</option>
+                                        <option value="Buddha" <%=siswa && siswa.agama==='Buddha' ? 'selected' : '' %>
+                                            >Buddha</option>
+                                        <option value="Konghucu" <%=siswa && siswa.agama==='Konghucu' ? 'selected' : ''
+                                            %>>Konghucu</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">No. KK</label>
+                                    <input type="text" class="form-input" name="no_kk"
+                                        value="<%= siswa ? siswa.no_kk : '' %>" maxlength="16"
+                                        placeholder="Nomor Kartu Keluarga">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <div class="form-section-title">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3z" />
+                                </svg>
+                                Data Orang Tua
+                            </div>
+                            
+                            <div class="form-group full-width" style="margin-bottom: 1.5rem;">
+                                <label class="form-label">Status Orang Tua <span>*</span></label>
+                                <select class="form-select" name="status_ortu" id="status_ortu" required>
+                                    <option value="Lengkap" <%= !siswa || siswa.status_ortu === 'Lengkap' ? 'selected' : '' %>>Lengkap</option>
+                                    <option value="Yatim" <%= siswa && siswa.status_ortu === 'Yatim' ? 'selected' : '' %>>Yatim</option>
+                                    <option value="Piatu" <%= siswa && siswa.status_ortu === 'Piatu' ? 'selected' : '' %>>Piatu</option>
+                                    <option value="Yatim Piatu" <%= siswa && siswa.status_ortu === 'Yatim Piatu' ? 'selected' : '' %>>Yatim Piatu</option>
+                                </select>
+                            </div>
+
+                            <div class="form-grid" id="container_ayah">
+                                <div class="form-group">
+                                    <label class="form-label">NIK Ayah <span class="req_ayah" style="display: none;">*</span></label>
+                                    <input type="text" class="form-input" name="nik_ayah" id="nik_ayah"
+                                        value="<%= siswa ? siswa.nik_ayah : '' %>" maxlength="16"
+                                        placeholder="NIK Ayah">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Nama Ayah <span class="req_ayah" style="display: none;">*</span></label>
+                                    <input type="text" class="form-input" name="nama_ayah" id="nama_ayah"
+                                        value="<%= siswa ? siswa.nama_ayah : '' %>" placeholder="Nama Ayah">
+                                </div>
+                            </div>
+                            
+                            <div class="form-grid" id="container_ibu" style="margin-top: 1.25rem;">
+                                <div class="form-group">
+                                    <label class="form-label">NIK Ibu <span class="req_ibu" style="display: none;">*</span></label>
+                                    <input type="text" class="form-input" name="nik_ibu" id="nik_ibu"
+                                        value="<%= siswa ? siswa.nik_ibu : '' %>" maxlength="16" placeholder="NIK Ibu">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Nama Ibu <span class="req_ibu" style="display: none;">*</span></label>
+                                    <input type="text" class="form-input" name="nama_ibu" id="nama_ibu"
+                                        value="<%= siswa ? siswa.nama_ibu : '' %>" placeholder="Nama Ibu">
+                                </div>
+                            </div>
+
+                            <div class="form-grid" id="container_wali" style="margin-top: 1.25rem;">
+                                <div class="form-group">
+                                    <label class="form-label">NIK Wali <span class="req_wali" style="display: none;">*</span></label>
+                                    <input type="text" class="form-input" name="nik_wali" id="nik_wali"
+                                        value="<%= siswa ? siswa.nik_wali : '' %>" maxlength="16" placeholder="NIK Wali">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Nama Wali <span class="req_wali" style="display: none;">*</span></label>
+                                    <input type="text" class="form-input" name="nama_wali" id="nama_wali"
+                                        value="<%= siswa ? siswa.nama_wali : '' %>" placeholder="Nama Wali">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <div class="form-section-title">
+                                <svg viewBox="0 0 24 24">
+                                    <path
+                                        d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+                                </svg>
+                                Alamat
+                            </div>
+                            <div class="form-grid">
+                                <div class="form-group full-width">
+                                    <label class="form-label">Alamat Lengkap</label>
+                                    <textarea class="form-textarea" name="alamat"
+                                        placeholder="Jl. nama jalan, No. rumah"><%= siswa ? siswa.alamat : '' %></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">RT</label>
+                                    <input type="text" class="form-input" name="rt" value="<%= siswa ? siswa.rt : '' %>"
+                                        placeholder="001">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">RW</label>
+                                    <input type="text" class="form-input" name="rw" value="<%= siswa ? siswa.rw : '' %>"
+                                        placeholder="001">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Provinsi</label>
+                                    <input type="hidden" name="provinsi" id="provinsi_name" value="<%= siswa ? siswa.provinsi : '' %>">
+                                    <select class="form-select" id="provinsi_select">
+                                        <option value="">Pilih Provinsi</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Kota/Kabupaten</label>
+                                    <input type="hidden" name="kota" id="kota_name" value="<%= siswa ? siswa.kota : '' %>">
+                                    <select class="form-select" id="kota_select" disabled>
+                                        <option value="">Pilih Kota/Kabupaten</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Kecamatan</label>
+                                    <input type="hidden" name="kecamatan" id="kecamatan_name" value="<%= siswa ? siswa.kecamatan : '' %>">
+                                    <select class="form-select" id="kecamatan_select" disabled>
+                                        <option value="">Pilih Kecamatan</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Kelurahan</label>
+                                    <input type="hidden" name="kelurahan" id="kelurahan_name" value="<%= siswa ? siswa.kelurahan : '' %>">
+                                    <select class="form-select" id="kelurahan_select" disabled>
+                                        <option value="">Pilih Kelurahan</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <div class="form-section-title">
+                                <svg viewBox="0 0 24 24">
+                                    <path
+                                        d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z" />
+                                </svg>
+                                Data Bantuan
+                            </div>
+                            <div class="form-grid">
+                                <!-- Program Bantuan removed, managed via status_bantuan -->
+                                <div class="form-group">
+                                    <label class="form-label">DTKS (Desil)</label>
+                                    <select class="form-select" name="dtks">
+                                        <option value="">Pilih Desil</option>
+                                        <option value="DESIL 1" <%=siswa && siswa.dtks==='DESIL 1' ? 'selected' : '' %>>Desil 1</option>
+                                        <option value="DESIL 2" <%=siswa && siswa.dtks==='DESIL 2' ? 'selected' : '' %>>Desil 2</option>
+                                        <option value="DESIL 3" <%=siswa && siswa.dtks==='DESIL 3' ? 'selected' : '' %>>Desil 3</option>
+                                        <option value="DESIL 4" <%=siswa && siswa.dtks==='DESIL 4' ? 'selected' : '' %>>Desil 4</option>
+                                        <option value="DESIL 5" <%=siswa && siswa.dtks==='DESIL 5' ? 'selected' : '' %>>Desil 5</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Status Kota (Dalam/Luar Kota)</label>
+                                    <select class="form-select" name="desil">
+                                        <option value="">Pilih Status</option>
+                                        <option value="Dalam Kota" <%=siswa && siswa.desil==='Dalam Kota' ? 'selected' : '' %>>Dalam Kota</option>
+                                        <option value="Luar Kota" <%=siswa && siswa.desil==='Luar Kota' ? 'selected' : '' %>>Luar Kota</option>
+                                    </select>
+                                </div>
+                                <!-- Status Pencairan removed, managed via status_bantuan -->
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <a href="/admin/siswa" class="btn btn-secondary">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <path
+                                        d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+                                </svg>
+                                Batal
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <path
+                                        d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z" />
+                                </svg>
+                                Simpan
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="toast" id="toast">
+        <svg viewBox="0 0 24 24">
+            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+        </svg>
+        <span class="toast-message" id="toastMessage">Berhasil disimpan!</span>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('active');
+            document.getElementById('sidebarOverlay').classList.toggle('active');
+        }
+
+        // Initialize Datepicker
+        flatpickr("input[name='tanggal_lahir']", {
+            dateFormat: "d/m/Y",
+            allowInput: true
+        });
+
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            toastMessage.textContent = message;
+
+            if (type === 'error') {
+                toast.classList.add('error');
+                toast.querySelector('svg').innerHTML = '<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>';
+            } else {
+                toast.classList.remove('error');
+                toast.querySelector('svg').innerHTML = '<path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>';
+            }
+
+            toast.style.display = 'flex';
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 3000);
+        }
+
+        // Logic for Dynamic Ortu Fields
+        const statusOrtuSelect = document.getElementById('status_ortu');
+        const containerAyah = document.getElementById('container_ayah');
+        const containerIbu = document.getElementById('container_ibu');
+        
+        const reqWali = document.querySelectorAll('.req_wali');
+        const reqAyah = document.querySelectorAll('.req_ayah');
+        const reqIbu = document.querySelectorAll('.req_ibu');
+        
+        const nikWali = document.getElementById('nik_wali');
+        const namaWali = document.getElementById('nama_wali');
+        const nikAyah = document.getElementById('nik_ayah');
+        const namaAyah = document.getElementById('nama_ayah');
+        const nikIbu = document.getElementById('nik_ibu');
+        const namaIbu = document.getElementById('nama_ibu');
+
+        function updateOrtuFields() {
+            const status = statusOrtuSelect.value;
+            
+            // Default required state (all optional initially)
+            reqAyah.forEach(el => el.style.display = 'none');
+            reqIbu.forEach(el => el.style.display = 'none');
+            reqWali.forEach(el => el.style.display = 'none');
+            
+            nikAyah.required = false;
+            namaAyah.required = false;
+            nikIbu.required = false;
+            namaIbu.required = false;
+            nikWali.required = false;
+            namaWali.required = false;
+
+            if (status === 'Lengkap') {
+                reqAyah.forEach(el => el.style.display = 'inline');
+                reqIbu.forEach(el => el.style.display = 'inline');
+                nikAyah.required = true;
+                namaAyah.required = true;
+                nikIbu.required = true;
+                namaIbu.required = true;
+            } else if (status === 'Yatim') {
+                reqIbu.forEach(el => el.style.display = 'inline');
+                nikIbu.required = true;
+                namaIbu.required = true;
+            } else if (status === 'Piatu') {
+                reqAyah.forEach(el => el.style.display = 'inline');
+                nikAyah.required = true;
+                namaAyah.required = true;
+            } else if (status === 'Yatim Piatu') {
+                reqWali.forEach(el => el.style.display = 'inline');
+                nikWali.required = true;
+                namaWali.required = true;
+            }
+        }
+
+        // Run on load and on change
+        statusOrtuSelect.addEventListener('change', updateOrtuFields);
+        updateOrtuFields();
+
+        document.getElementById('siswaForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+
+            try {
+                const res = await fetch('/api/admin/siswa', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await res.json();
+
+                if (result.success) {
+                    showToast(result.message);
+                    setTimeout(() => {
+                        window.location.href = '/admin/siswa';
+                    }, 1500);
+                } else {
+                    showToast(result.message || 'Terjadi kesalahan!', 'error');
+                }
+            } catch (error) {
+                console.error(error);
+                showToast('Gagal menyimpan data!', 'error');
+            }
+        });
+
+        // ==========================================
+        // API Wilayah Indonesia Logic
+        // ==========================================
+        const apiWilayah = 'https://www.emsifa.com/api-wilayah-indonesia/api';
+        
+        const provSelect = document.getElementById('provinsi_select');
+        const kotaSelect = document.getElementById('kota_select');
+        const kecSelect = document.getElementById('kecamatan_select');
+        const kelSelect = document.getElementById('kelurahan_select');
+
+        const provName = document.getElementById('provinsi_name');
+        const kotaName = document.getElementById('kota_name');
+        const kecName = document.getElementById('kecamatan_name');
+        const kelName = document.getElementById('kelurahan_name');
+
+        async function loadProvinces() {
+            try {
+                const res = await fetch(`${apiWilayah}/provinces.json`);
+                const data = await res.json();
+                
+                data.forEach(prov => {
+                    const option = document.createElement('option');
+                    option.value = prov.id;
+                    option.textContent = prov.name;
+                    provSelect.appendChild(option);
+                });
+
+                if (provName.value) {
+                    const matched = data.find(p => p.name.toUpperCase() === provName.value.toUpperCase());
+                    if (matched) {
+                        provSelect.value = matched.id;
+                        await loadKota(matched.id);
+                    }
+                }
+            } catch (error) {
+                console.error('Error fetching provinces:', error);
+            }
+        }
+
+        async function loadKota(provId) {
+            kotaSelect.innerHTML = '<option value="">Pilih Kota/Kabupaten</option>';
+            kecSelect.innerHTML = '<option value="">Pilih Kecamatan</option>';
+            kelSelect.innerHTML = '<option value="">Pilih Kelurahan</option>';
+            
+            kotaSelect.disabled = true;
+            kecSelect.disabled = true;
+            kelSelect.disabled = true;
+
+            if (!provId) return;
+
+            try {
+                const res = await fetch(`${apiWilayah}/regencies/${provId}.json`);
+                const data = await res.json();
+
+                data.forEach(kota => {
+                    const option = document.createElement('option');
+                    option.value = kota.id;
+                    option.textContent = kota.name;
+                    kotaSelect.appendChild(option);
+                });
+                kotaSelect.disabled = false;
+
+                if (kotaName.value) {
+                    const matched = data.find(k => k.name.toUpperCase() === kotaName.value.toUpperCase());
+                    if (matched) {
+                        kotaSelect.value = matched.id;
+                        await loadKecamatan(matched.id);
+                    }
+                }
+            } catch (error) {
+                console.error('Error fetching kota:', error);
+            }
+        }
+
+        async function loadKecamatan(kotaId) {
+            kecSelect.innerHTML = '<option value="">Pilih Kecamatan</option>';
+            kelSelect.innerHTML = '<option value="">Pilih Kelurahan</option>';
+            
+            kecSelect.disabled = true;
+            kelSelect.disabled = true;
+
+            if (!kotaId) return;
+
+            try {
+                const res = await fetch(`${apiWilayah}/districts/${kotaId}.json`);
+                const data = await res.json();
+
+                data.forEach(kec => {
+                    const option = document.createElement('option');
+                    option.value = kec.id;
+                    option.textContent = kec.name;
+                    kecSelect.appendChild(option);
+                });
+                kecSelect.disabled = false;
+
+                if (kecName.value) {
+                    const matched = data.find(k => k.name.toUpperCase() === kecName.value.toUpperCase());
+                    if (matched) {
+                        kecSelect.value = matched.id;
+                        await loadKelurahan(matched.id);
+                    }
+                }
+            } catch (error) {
+                console.error('Error fetching kecamatan:', error);
+            }
+        }
+
+        async function loadKelurahan(kecId) {
+            kelSelect.innerHTML = '<option value="">Pilih Kelurahan</option>';
+            kelSelect.disabled = true;
+
+            if (!kecId) return;
+
+            try {
+                const res = await fetch(`${apiWilayah}/villages/${kecId}.json`);
+                const data = await res.json();
+
+                data.forEach(kel => {
+                    const option = document.createElement('option');
+                    option.value = kel.id;
+                    option.textContent = kel.name;
+                    kelSelect.appendChild(option);
+                });
+                kelSelect.disabled = false;
+
+                if (kelName.value) {
+                    const matched = data.find(k => k.name.toUpperCase() === kelName.value.toUpperCase());
+                    if (matched) {
+                        kelSelect.value = matched.id;
+                    }
+                }
+            } catch (error) {
+                console.error('Error fetching kelurahan:', error);
+            }
+        }
+
+        provSelect.addEventListener('change', (e) => {
+            const selectedText = e.target.options[e.target.selectedIndex].text;
+            provName.value = e.target.value ? selectedText : '';
+            
+            kotaName.value = '';
+            kecName.value = '';
+            kelName.value = '';
+            
+            loadKota(e.target.value);
+        });
+
+        kotaSelect.addEventListener('change', (e) => {
+            const selectedText = e.target.options[e.target.selectedIndex].text;
+            kotaName.value = e.target.value ? selectedText : '';
+            
+            kecName.value = '';
+            kelName.value = '';
+            
+            loadKecamatan(e.target.value);
+        });
+
+        kecSelect.addEventListener('change', (e) => {
+            const selectedText = e.target.options[e.target.selectedIndex].text;
+            kecName.value = e.target.value ? selectedText : '';
+            
+            kelName.value = '';
+            
+            loadKelurahan(e.target.value);
+        });
+
+        kelSelect.addEventListener('change', (e) => {
+            const selectedText = e.target.options[e.target.selectedIndex].text;
+            kelName.value = e.target.value ? selectedText : '';
+        });
+
+        // Initialize API Wilayah
+        loadProvinces();
+    </script>
+</body>
+
+</html>
