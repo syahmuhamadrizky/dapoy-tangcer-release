@@ -788,13 +788,58 @@
                     <h1>Dashboard</h1>
                     <p>Selamat datang di Sistem Pendataan Bantuan Siswa</p>
                 </div>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-info">
+                <div class="user-avatar">
+                    <%= user.nama.charAt(0).toUpperCase() %>
+                </div>
+                <div class="user-details">
+                    <h4>
+                        <%= user.nama %>
+                    </h4>
+                    <p>Administrator</p>
+                </div>
             </div>
-            <div class="header-right">
+            <a href="/logout" class="btn-logout">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z" />
+                </svg>
+                Logout
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Top Header -->
+        <header class="top-header">
+            <div class="header-left">
+                <button class="menu-toggle" onclick="toggleSidebar()">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
+                    </svg>
+                </button>
+                <div class="header-title">
+                    <h1>Dashboard</h1>
+                    <p>Selamat datang di Sistem Pendataan Bantuan Siswa</p>
+                </div>
+            </div>
+            <div class="header-right" style="display: flex; gap: 10px; align-items: center;">
+                <button class="btn btn-outline" id="btnTrialTimer" onclick="showActivationModal()"
+                    style="display: none; border-color: #F59E0B; color: #F59E0B; cursor: pointer; min-width: 150px; justify-content: center;">
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18" style="margin-right: 5px;">
+                        <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/>
+                        <path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+                    </svg>
+                    <span id="trialCountdown">Trial: 00:00</span>
+                </button>
                 <button class="btn btn-outline" id="btnCekUpdate" onclick="cekUpdate()"
                     style="border-color: var(--secondary); color: var(--secondary);">
                     <svg viewBox="0 0 24 24" fill="currentColor">
-                        <path
-                            d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z" />
+                        <path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z" />
                     </svg>
                     Cek Update
                 </button>
@@ -1023,158 +1068,172 @@
         function displayDate() {
             const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
             document.getElementById('currentDate').textContent = new Date().toLocaleDateString('id-ID', options);
+        }
+        
+        displayDate();
 
-            async function cekUpdate() {
-                const btn = document.getElementById('btnCekUpdate');
-                const originalText = btn.innerHTML;
-                btn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor" class="spin" width="16" height="16"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/></svg> Mengecek...';
-                btn.disabled = true;
+        // License Functions
+        async function checkLicenseStatus() {
+            try {
+                const res = await fetch('/api/license-status');
+                const data = await res.json();
 
-                try {
-                    const res = await fetch('/api/admin/check-update', { method: 'POST' });
-                    const result = await res.json();
-                    if (result.success) {
-                        alert('Update berhasil ditarik!\n\nOutput: ' + result.output);
-                    } else {
-                        alert('Gagal: ' + result.message);
+                const banner = document.getElementById('licenseBanner');
+                const message = document.getElementById('licenseMessage');
+
+                if (data.status === 'registered' && data.isLicenseValid) {
+                    banner.style.display = 'none';
+                    const btnTrial = document.getElementById('btnTrialTimer');
+                    btnTrial.style.display = 'flex';
+                    btnTrial.style.borderColor = '#10B981';
+                    btnTrial.style.color = '#10B981';
+                    btnTrial.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18" style="margin-right: 5px;"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> <span>Registered (pro)</span>';
+                    btnTrial.onclick = null;
+                    btnTrial.style.cursor = 'default';
+                } else if (data.status === 'expired') {
+                    banner.style.display = 'block';
+                    banner.style.background = 'linear-gradient(135deg, #EF4444 0%, #DC2626 100%)';
+                    message.textContent = 'Masa trial telah habis. Silakan aktivasi lisensi untuk melanjutkan.';
+                    document.getElementById('btnTrialTimer').style.display = 'none';
+                } else if (data.status === 'trial') {
+                    banner.style.display = 'block';
+                    banner.style.background = 'linear-gradient(135deg, #F59E0B 0%, #D97706 100%)';
+                    if (data.trialEndsAt) {
+                        startTrialCountdown(data.trialEndsAt);
+                        message.textContent = `Versi Trial berjalan. Silakan aktivasi lisensi untuk penggunaan tanpa batasan.`;
                     }
-                } catch (error) {
-                    alert('Terjadi kesalahan jaringan.');
-                } finally {
-                    btn.innerHTML = originalText;
-                    btn.disabled = false;
                 }
+            } catch (error) {
+                console.error('Failed to check license status:', error);
+            }
+        }
+
+        function showActivationModal() {
+            document.getElementById('activationModal').style.display = 'flex';
+        }
+
+        function hideActivationModal() {
+            document.getElementById('activationModal').style.display = 'none';
+        }
+
+        async function activateLicense() {
+            const licenseKey = document.getElementById('licenseKeyInput').value.trim();
+            const resultMsg = document.getElementById('activationResult');
+            const btn = document.getElementById('btnActivate');
+
+            if (!licenseKey) {
+                resultMsg.textContent = 'License Key wajib diisi!';
+                resultMsg.style.color = '#EF4444';
+                return;
             }
 
-            // License Functions
-            async function checkLicenseStatus() {
-                try {
-                    const res = await fetch('/api/license-status');
-                    const data = await res.json();
+            btn.innerHTML = 'Mengaktivasi...';
+            btn.disabled = true;
 
-                    const banner = document.getElementById('licenseBanner');
-                    const message = document.getElementById('licenseMessage');
+            try {
+                const res = await fetch('/api/activate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ license_key: licenseKey })
+                });
 
-                    if (data.status === 'registered' && data.isLicenseValid) {
-                        banner.style.display = 'none';
-                    } else if (data.status === 'expired') {
-                        banner.style.display = 'block';
-                        banner.style.background = 'linear-gradient(135deg, #EF4444 0%, #DC2626 100%)';
-                        message.textContent = 'Masa trial telah habis. Silakan aktivasi lisensi untuk继续 menggunakan aplikasi.';
-                    } else if (data.status === 'trial') {
-                        banner.style.display = 'block';
-                        banner.style.background = 'linear-gradient(135deg, #F59E0B 0%, #D97706 100%)';
-                        if (data.trialEndsAt) {
-                            const remaining = Math.round((data.trialEndsAt - Date.now()) / 60000);
-                            message.textContent = `Versi Trial - Sisa waktu: ${remaining} menit. Silakan aktivasi lisensi untuk penggunaan tanpa batasan.`;
-                        }
-                    }
-                } catch (error) {
-                    console.error('Failed to check license status:', error);
-                }
-            }
+                const data = await res.json();
 
-            function showActivationModal() {
-                document.getElementById('activationModal').style.display = 'flex';
-            }
-
-            function hideActivationModal() {
-                document.getElementById('activationModal').style.display = 'none';
-            }
-
-            async function activateLicense() {
-                const licenseKey = document.getElementById('licenseKeyInput').value.trim();
-                const hwidDisplay = document.getElementById('hwidDisplay');
-                const btn = document.getElementById('btnActivate');
-                const resultMsg = document.getElementById('activationResult');
-
-                if (!licenseKey) {
-                    resultMsg.textContent = 'License Key wajib diisi!';
+                if (data.success) {
+                    resultMsg.textContent = '✅ Aktivasi berhasil!';
+                    resultMsg.style.color = '#10B981';
+                    setTimeout(() => {
+                        hideActivationModal();
+                        location.reload();
+                    }, 1500);
+                } else {
+                    resultMsg.textContent = '❌ ' + data.message;
                     resultMsg.style.color = '#EF4444';
+                }
+            } catch (error) {
+                resultMsg.textContent = '❌ Gagal terhubung ke server.';
+                resultMsg.style.color = '#EF4444';
+            } finally {
+                btn.innerHTML = 'Aktivasi Sekarang';
+                btn.disabled = false;
+            }
+        }
+
+        async function showHWID() {
+            try {
+                const res = await fetch('/api/hwid');
+                const data = await res.json();
+                document.getElementById('hwidDisplay').textContent = 'HWID: ' + data.hwid;
+            } catch (error) {
+                document.getElementById('hwidDisplay').textContent = 'Gagal mengambil HWID';
+            }
+        }
+
+        let countdownInterval;
+        function startTrialCountdown(endTime) {
+            const btnTrial = document.getElementById('btnTrialTimer');
+            const trialText = document.getElementById('trialCountdown');
+            btnTrial.style.display = 'flex';
+            
+            clearInterval(countdownInterval);
+            countdownInterval = setInterval(() => {
+                const now = Date.now();
+                const distance = endTime - now;
+                
+                if (distance <= 0) {
+                    clearInterval(countdownInterval);
+                    trialText.textContent = 'Trial Habis';
+                    checkLicenseStatus(); // Re-check
+                    return;
+                }
+                
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                
+                trialText.textContent = `Trial: ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }, 1000);
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function () {
+            checkLicenseStatus();
+            showHWID();
+        });
+
+        async function cekUpdate() {
+            const btn = document.getElementById('btnCekUpdate');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<span class="spin">⏳</span> Mengecek...';
+            btn.disabled = true;
+
+            try {
+                const res = await fetch('/api/system/update/check');
+                const data = await res.json();
+
+                if (!data.success) {
+                    alert('Gagal mengecek update: ' + data.message);
                     return;
                 }
 
-                btn.innerHTML = 'Mengaktivasi...';
-                btn.disabled = true;
-
-                try {
-                    const res = await fetch('/api/activate', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ license_key: licenseKey })
-                    });
-
-                    const data = await res.json();
-
-                    if (data.success) {
-                        resultMsg.textContent = '✅ Aktivasi berhasil!';
-                        resultMsg.style.color = '#10B981';
-                        setTimeout(() => {
-                            hideActivationModal();
-                            location.reload();
-                        }, 1500);
-                    } else {
-                        resultMsg.textContent = '❌ ' + data.message;
-                        resultMsg.style.color = '#EF4444';
+                if (data.isLatest) {
+                    alert('✅ ' + data.message);
+                } else {
+                    if (confirm(`⚠️ ${data.message}\nApakah Anda ingin melakukan update sekarang? (Aplikasi akan direstart otomatis)`)) {
+                        btn.innerHTML = '<span class="spin">🔄</span> Updating...';
+                        const updateRes = await fetch('/api/system/update', { method: 'POST' });
+                        const updateData = await updateRes.json();
+                        alert(updateData.message);
+                        setTimeout(() => location.reload(), 5000);
                     }
-                } catch (error) {
-                    resultMsg.textContent = '❌ Gagal terhubung ke server.';
-                    resultMsg.style.color = '#EF4444';
-                } finally {
-                    btn.innerHTML = 'Aktivasi Sekarang';
-                    btn.disabled = false;
                 }
+            } catch (err) {
+                alert('Gagal terhubung ke server.');
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
             }
-
-            async function showHWID() {
-                try {
-                    const res = await fetch('/api/hwid');
-                    const data = await res.json();
-                    document.getElementById('hwidDisplay').textContent = 'HWID: ' + data.hwid;
-                } catch (error) {
-                    document.getElementById('hwidDisplay').textContent = 'Gagal mengambil HWID';
-                }
-            }
-
-            // Initialize on page load
-            document.addEventListener('DOMContentLoaded', function () {
-                checkLicenseStatus();
-                showHWID();
-            });
-
-            async function cekUpdate() {
-                const btn = document.getElementById('btnCekUpdate');
-                const originalText = btn.innerHTML;
-                btn.innerHTML = '<span class="spin">⏳</span> Mengecek...';
-                btn.disabled = true;
-
-                try {
-                    const res = await fetch('/api/system/update/check');
-                    const data = await res.json();
-
-                    if (!data.success) {
-                        alert('Gagal mengecek update: ' + data.message);
-                        return;
-                    }
-
-                    if (data.isLatest) {
-                        alert('✅ ' + data.message);
-                    } else {
-                        if (confirm(`⚠️ ${data.message}\nApakah Anda ingin melakukan update sekarang? (Aplikasi akan direstart otomatis)`)) {
-                            btn.innerHTML = '<span class="spin">🔄</span> Updating...';
-                            const updateRes = await fetch('/api/system/update', { method: 'POST' });
-                            const updateData = await updateRes.json();
-                            alert(updateData.message);
-                            setTimeout(() => location.reload(), 5000);
-                        }
-                    }
-                } catch (err) {
-                    alert('Gagal terhubung ke server.');
-                } finally {
-                    btn.innerHTML = originalText;
-                    btn.disabled = false;
-                }
-            }
+        }
     </script>
     <style>
         @keyframes spin {
@@ -1232,8 +1291,7 @@
             </div>
 
             <p style="margin-top: 1rem; font-size: 0.75rem; color: var(--text-secondary); text-align: center;">
-                Dapatkan License Key di <a href="https://hub.dapoy.net" target="_blank"
-                    style="color: var(--secondary);">hub.dapoy.net</a>
+                <a href="https://dapoy.net" target="_blank" style="color: var(--secondary); text-decoration: none; font-weight: 600;">https://dapoy.net</a> by SMR || 2026
             </p>
         </div>
     </div>
