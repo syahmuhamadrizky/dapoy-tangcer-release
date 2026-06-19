@@ -1,8 +1,7 @@
-1.2.0
-Versi 1.2.0 - Dapoy Bantuan Siswa
+1.3.0
+Versi 1.3.0 - Dapoy Bantuan Siswa
 
-[+] Penambahan Filter Tahun, Semester, Triwulan, Kelas di Dashboard Admin.
-[+] Penambahan Indikator/Simbol Kelengkapan Data Siswa.
-[+] Penambahan fitur Cek Update OTA berbasis SemVer (Semantic Versioning).
-[+] Update struktur `status_bantuan` dan integrasi data Dashboard.
-[!] Perbaikan minor query MySQL pada dashboard agar hasil lebih akurat.
+[+] Penambahan fitur Kustomisasi Nama Instansi dan Logo Sekolah di halaman Pengaturan Admin.
+[+] Nama sekolah dan logo kini tampil dinamis di sidebar Admin, Siswa, dan halaman Login.
+[!] Perbaikan filter Semester di Dashboard Admin (default menjadi "Semua").
+[+] Optimalisasi global middleware untuk pengaturan sistem.

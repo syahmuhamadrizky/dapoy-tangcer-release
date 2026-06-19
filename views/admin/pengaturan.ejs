@@ -94,14 +94,19 @@
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <div class="sidebar-logo">
-                <div class="logo-icon">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z" />
-                    </svg>
-                </div>
+                <% if(settings && settings.logoSekolah) { %>
+                    <div style="width: 45px; height: 45px; border-radius: 12px; overflow: hidden; background: white; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                        <img src="<%= settings.logoSekolah %>" alt="Logo" style="width: 100%; height: 100%; object-fit: contain;">
+                    </div>
+                <% } else { %>
+                    <div class="logo-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z" />
+                        </svg>
+                    </div>
+                <% } %>
                 <div class="logo-text">
-                    <h2>Bantuan Siswa</h2>
-                    <p>Tangerang</p>
+                    <h2 style="font-size: 0.9rem; line-height: 1.2; white-space: normal;"><%= settings ? settings.namaSekolah : 'Bantuan Siswa' %></h2>
                 </div>
             </div>
         </div>
@@ -212,6 +217,39 @@
                     </button>
                 </form>
             </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2>Pengaturan Aplikasi</h2>
+                </div>
+                
+                <div class="alert alert-success" id="alertSuccessApp">Pengaturan berhasil disimpan.</div>
+                <div class="alert alert-error" id="alertErrorApp">Gagal menyimpan pengaturan.</div>
+
+                <form id="formPengaturanAplikasi" onsubmit="simpanPengaturan(event)" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label class="form-label">Nama Sekolah / Instansi</label>
+                        <input type="text" name="namaSekolah" id="namaSekolah" class="form-control" value="<%= settings.namaSekolah %>" required placeholder="Contoh: SD Negeri Tanah Tinggi 1">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Logo Sekolah</label>
+                        <% if(settings.logoSekolah) { %>
+                            <div style="margin-bottom: 10px;">
+                                <img src="<%= settings.logoSekolah %>" alt="Logo Sekolah" style="height: 60px; border-radius: 8px;">
+                            </div>
+                        <% } %>
+                        <input type="file" name="logo_sekolah" id="logo_sekolah" class="form-control" accept="image/*">
+                        <small style="color: var(--text-secondary); margin-top: 5px; display: block;">Biarkan kosong jika tidak ingin mengubah logo.</small>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" id="btnSubmitApp">
+                        <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
+                            <path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/>
+                        </svg>
+                        Simpan Pengaturan
+                    </button>
+                </form>
+            </div>
         </div>
     </main>
 
@@ -219,6 +257,51 @@
         function toggleSidebar() {
             document.getElementById('sidebar').classList.toggle('active');
             document.getElementById('sidebarOverlay').classList.toggle('active');
+        }
+
+        async function simpanPengaturan(e) {
+            e.preventDefault();
+            const form = document.getElementById('formPengaturanAplikasi');
+            const btnSubmit = document.getElementById('btnSubmitApp');
+            const alertSuccess = document.getElementById('alertSuccessApp');
+            const alertError = document.getElementById('alertErrorApp');
+
+            const formData = new FormData(form);
+
+            btnSubmit.disabled = true;
+            btnSubmit.innerHTML = 'Menyimpan...';
+
+            try {
+                const res = await fetch('/api/admin/settings/save', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await res.json();
+                
+                if (data.success) {
+                    alertSuccess.textContent = data.message;
+                    alertSuccess.style.display = 'block';
+                    alertError.style.display = 'none';
+                    setTimeout(() => window.location.reload(), 1500);
+                } else {
+                    alertError.textContent = data.message;
+                    alertError.style.display = 'block';
+                    alertSuccess.style.display = 'none';
+                }
+            } catch (err) {
+                alertError.textContent = 'Terjadi kesalahan saat menghubungi server.';
+                alertError.style.display = 'block';
+                alertSuccess.style.display = 'none';
+            } finally {
+                btnSubmit.disabled = false;
+                btnSubmit.innerHTML = `
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
+                        <path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/>
+                    </svg>
+                    Simpan Pengaturan
+                `;
+            }
         }
 
         async function gantiPassword(e) {

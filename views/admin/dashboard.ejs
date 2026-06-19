@@ -879,6 +879,7 @@
                     <div class="form-group" style="flex: 1; min-width: 150px;">
                         <label style="display: block; font-size: 0.85rem; font-weight: 500; color: var(--text-secondary); margin-bottom: 0.5rem;">Semester</label>
                         <select name="semester" class="form-control" style="width: 100%; padding: 0.75rem 1rem; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-light);">
+                            <option value="">Semua Semester</option>
                             <option value="Ganjil" <%= filters.semester === 'Ganjil' ? 'selected' : '' %>>Ganjil</option>
                             <option value="Genap" <%= filters.semester === 'Genap' ? 'selected' : '' %>>Genap</option>
                         </select>
