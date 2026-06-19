@@ -875,13 +875,14 @@
                                     <th>Periode</th>
                                     <th>Pencairan</th>
                                     <th>Rekening</th>
+                                    <th>Laporan</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <% if (bantuanList.length === 0) { %>
                                     <tr>
-                                        <td colspan="8">
+                                        <td colspan="9">
                                             <div class="empty-state">
                                                 <svg viewBox="0 0 24 24">
                                                     <path
@@ -910,6 +911,17 @@
                                                     <span class="badge badge-success"><%= b.status_kepemilikan === 'Pengajuan' ? 'Pengajuan Baru' : 'Sudah Ada' %></span>
                                                 <% } else { %>
                                                     <span class="badge badge-danger">Belum Ada</span>
+                                                <% } %>
+                                            </td>
+                                            <td>
+                                                <% if(b.status_laporan === 'Diterima') { %>
+                                                    <span class="badge badge-success">Diterima</span>
+                                                <% } else if(b.status_laporan === 'Menunggu Verifikasi') { %>
+                                                    <span class="badge badge-warning">Menunggu</span>
+                                                <% } else if(b.status_laporan === 'Ditolak') { %>
+                                                    <span class="badge badge-danger">Ditolak</span>
+                                                <% } else { %>
+                                                    <span class="badge badge-danger">Belum Laporan</span>
                                                 <% } %>
                                             </td>
                                             <td>
