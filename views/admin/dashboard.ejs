@@ -1201,37 +1201,70 @@
             showHWID();
         });
 
+        function showUpdateModal() {
+            document.getElementById('updateModal').style.display = 'flex';
+        }
+        
+        function hideUpdateModal() {
+            document.getElementById('updateModal').style.display = 'none';
+        }
+
         async function cekUpdate() {
             const btn = document.getElementById('btnCekUpdate');
             const originalText = btn.innerHTML;
             btn.innerHTML = '<span class="spin">⏳</span> Mengecek...';
             btn.disabled = true;
 
+            const modalBody = document.getElementById('updateModalBody');
+            const modalActions = document.getElementById('updateModalActions');
+
+            showUpdateModal();
+            modalBody.innerHTML = '<div style="display:flex; justify-content:center; margin-bottom:1rem;"><svg class="spin" viewBox="0 0 24 24" width="32" height="32" fill="var(--secondary)"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/></svg></div><p>Mengecek pembaruan ke server...</p>';
+            modalActions.innerHTML = '<button onclick="hideUpdateModal()" style="flex: 1; padding: 0.75rem; border: 2px solid var(--border); border-radius: 8px; background: white; color: var(--text-primary); font-weight: 600; cursor: pointer;">Batal</button>';
+
             try {
                 const res = await fetch('/api/system/update/check');
                 const data = await res.json();
 
                 if (!data.success) {
-                    alert('Gagal mengecek update: ' + data.message);
+                    modalBody.innerHTML = `<p style="color:var(--danger);">❌ Gagal mengecek update: ${data.message}</p>`;
                     return;
                 }
 
                 if (data.isLatest) {
-                    alert('✅ ' + data.message);
+                    modalBody.innerHTML = `<p style="color:var(--success); font-weight:600; font-size:1.1rem; margin-bottom:0.5rem;">✅ Sistem Sudah Versi Terbaru!</p><p style="font-size:0.85rem; color:var(--text-secondary);">${data.message}</p>`;
+                    modalActions.innerHTML = '<button onclick="hideUpdateModal()" style="flex: 1; padding: 0.75rem; border: none; border-radius: 8px; background: var(--secondary); color: white; font-weight: 600; cursor: pointer;">Tutup</button>';
                 } else {
-                    if (confirm(`⚠️ ${data.message}\nApakah Anda ingin melakukan update sekarang? (Aplikasi akan direstart otomatis)`)) {
-                        btn.innerHTML = '<span class="spin">🔄</span> Updating...';
-                        const updateRes = await fetch('/api/system/update', { method: 'POST' });
-                        const updateData = await updateRes.json();
-                        alert(updateData.message);
-                        setTimeout(() => location.reload(), 5000);
-                    }
+                    modalBody.innerHTML = `<p style="color:#F59E0B; font-weight:600; font-size:1.1rem; margin-bottom:0.5rem;">⚠️ Update Tersedia!</p><p style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:1rem;">${data.message}</p><p style="font-size:0.85rem;">Apakah Anda ingin melakukan update sekarang? (Aplikasi akan direstart otomatis)</p>`;
+                    modalActions.innerHTML = `
+                        <button onclick="hideUpdateModal()" style="flex: 1; padding: 0.75rem; border: 2px solid var(--border); border-radius: 8px; background: white; color: var(--text-primary); font-weight: 600; cursor: pointer;">Nanti Saja</button>
+                        <button onclick="doUpdateSistem()" style="flex: 1; padding: 0.75rem; border: none; border-radius: 8px; background: var(--secondary); color: white; font-weight: 600; cursor: pointer;">Update Sekarang</button>
+                    `;
                 }
             } catch (err) {
-                alert('Gagal terhubung ke server.');
+                modalBody.innerHTML = `<p style="color:var(--danger);">❌ Gagal terhubung ke server.</p>`;
             } finally {
                 btn.innerHTML = originalText;
                 btn.disabled = false;
+            }
+        }
+
+        async function doUpdateSistem() {
+            const modalBody = document.getElementById('updateModalBody');
+            const modalActions = document.getElementById('updateModalActions');
+            
+            modalBody.innerHTML = '<div style="display:flex; justify-content:center; margin-bottom:1rem;"><svg class="spin" viewBox="0 0 24 24" width="32" height="32" fill="var(--secondary)"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/></svg></div><p>Sedang memperbarui sistem... mohon tunggu.</p>';
+            modalActions.innerHTML = '';
+
+            try {
+                const updateRes = await fetch('/api/system/update', { method: 'POST' });
+                const updateData = await updateRes.json();
+                
+                modalBody.innerHTML = `<p style="color:var(--success); font-weight:600; font-size:1.1rem; margin-bottom:0.5rem;">✅ ${updateData.message}</p><p style="font-size:0.85rem; color:var(--text-secondary);">Halaman akan dimuat ulang dalam 5 detik...</p>`;
+                setTimeout(() => location.reload(), 5000);
+            } catch(e) {
+                modalBody.innerHTML = `<p style="color:var(--danger);">❌ Terputus dari server (mungkin aplikasi sedang restart). Halaman akan dimuat ulang...</p>`;
+                setTimeout(() => location.reload(), 5000);
             }
         }
     </script>
@@ -1293,6 +1326,29 @@
             <p style="margin-top: 1rem; font-size: 0.75rem; color: var(--text-secondary); text-align: center;">
                 <a href="https://dapoy.net" target="_blank" style="color: var(--secondary); text-decoration: none; font-weight: 600;">https://dapoy.net</a> by SMR || 2026
             </p>
+        </div>
+    </div>
+    <!-- Update Modal -->
+    <div id="updateModal"
+        style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9999; justify-content: center; align-items: center;">
+        <div
+            style="background: white; border-radius: 16px; padding: 2rem; max-width: 450px; width: 90%; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h2 style="color: var(--primary); font-family: 'Poppins', sans-serif; font-size: 1.25rem;">🔄 Cek Update</h2>
+                <button onclick="hideUpdateModal()"
+                    style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-secondary);">&times;</button>
+            </div>
+
+            <div id="updateModalBody" style="margin-bottom: 1.5rem; font-size: 0.95rem; color: var(--text-primary); text-align: center;">
+                Memeriksa pembaruan sistem...
+            </div>
+
+            <div style="display: flex; gap: 0.75rem;" id="updateModalActions">
+                <button onclick="hideUpdateModal()"
+                    style="flex: 1; padding: 0.75rem; border: 2px solid var(--border); border-radius: 8px; background: white; color: var(--text-primary); font-weight: 600; cursor: pointer;">
+                    Tutup
+                </button>
+            </div>
         </div>
     </div>
 </body>
