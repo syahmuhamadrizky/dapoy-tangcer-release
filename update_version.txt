@@ -1,9 +1,8 @@
-1
-Versi 1.1.0 - Dapoy Bantuan Siswa
+1.2.0
+Versi 1.2.0 - Dapoy Bantuan Siswa
 
-[+] Penambahan sistem lisensi terhubung ke Dapoy Hub.
-[+] Penambahan masa percobaan (Free Trial) otomatis selama 2 jam.
-[+] Penambahan banner informasi lisensi di Dashboard Admin.
-[+] Penambahan fitur Cek Update Aplikasi (OTA).
-[+] Perbaikan UI/UX pada beberapa halaman Dashboard Admin.
-[!] Peningkatan keamanan pada endpoint dan integrasi database.
+[+] Penambahan Filter Tahun, Semester, Triwulan, Kelas di Dashboard Admin.
+[+] Penambahan Indikator/Simbol Kelengkapan Data Siswa.
+[+] Penambahan fitur Cek Update OTA berbasis SemVer (Semantic Versioning).
+[+] Update struktur `status_bantuan` dan integrasi data Dashboard.
+[!] Perbaikan minor query MySQL pada dashboard agar hasil lebih akurat.
