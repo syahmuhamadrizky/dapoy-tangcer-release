@@ -1135,6 +1135,40 @@
                 checkLicenseStatus();
                 showHWID();
             });
+
+            async function cekUpdate() {
+                const btn = document.getElementById('btnCekUpdate');
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<span class="spin">⏳</span> Mengecek...';
+                btn.disabled = true;
+
+                try {
+                    const res = await fetch('/api/system/update/check');
+                    const data = await res.json();
+
+                    if (!data.success) {
+                        alert('Gagal mengecek update: ' + data.message);
+                        return;
+                    }
+
+                    if (data.isLatest) {
+                        alert('✅ ' + data.message);
+                    } else {
+                        if (confirm(`⚠️ ${data.message}\nApakah Anda ingin melakukan update sekarang? (Aplikasi akan direstart otomatis)`)) {
+                            btn.innerHTML = '<span class="spin">🔄</span> Updating...';
+                            const updateRes = await fetch('/api/system/update', { method: 'POST' });
+                            const updateData = await updateRes.json();
+                            alert(updateData.message);
+                            setTimeout(() => location.reload(), 5000);
+                        }
+                    }
+                } catch (err) {
+                    alert('Gagal terhubung ke server.');
+                } finally {
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                }
+            }
     </script>
     <style>
         @keyframes spin {

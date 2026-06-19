@@ -1,0 +1,9 @@
+1
+Versi 1.1.0 - Dapoy Bantuan Siswa
+
+[+] Penambahan sistem lisensi terhubung ke Dapoy Hub.
+[+] Penambahan masa percobaan (Free Trial) otomatis selama 2 jam.
+[+] Penambahan banner informasi lisensi di Dashboard Admin.
+[+] Penambahan fitur Cek Update Aplikasi (OTA).
+[+] Perbaikan UI/UX pada beberapa halaman Dashboard Admin.
+[!] Peningkatan keamanan pada endpoint dan integrasi database.
